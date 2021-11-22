@@ -1,14 +1,14 @@
-import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 import {
-  LoginScreen,
-  RegisterScreen,
-  ProjectListScreen,
-  ProjectScreen,
-  KanbanScreen,
-  EpicScreen,
-} from 'screens';
+  useRoutes,
+  RouteObject,
+  Navigate,
+} from 'react-router-dom';
+import { AuthScreen } from 'screens';
 import { AuthProvider } from 'provider';
-import { AuthScreenContainer, ScreenContainer } from 'components/UI';
+import {
+  AuthScreenContainer,
+  ScreenContainer,
+} from 'components/UI';
 
 const routes: Array<RouteObject> = [
   {
@@ -16,16 +16,8 @@ const routes: Array<RouteObject> = [
     element: <AuthScreenContainer />,
     children: [
       {
-        path: 'login',
-        element: <LoginScreen />,
-      },
-      {
-        path: 'register',
-        element: <RegisterScreen />,
-      },
-      {
         path: '',
-        element: <Navigate to="login" replace />,
+        element: <AuthScreen />,
       },
     ],
   },

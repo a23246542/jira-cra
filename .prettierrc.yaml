@@ -3,7 +3,7 @@ arrowParens: always
 bracketSpacing: true
 jsxBracketSameLine: false
 jsxSingleQuote: false
-printWidth: 100
+printWidth: 60
 proseWrap: always
 quoteProps: as-needed
 semi: true
