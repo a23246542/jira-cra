@@ -23,5 +23,6 @@ export const AuthScreen = () => {
 
 const Title = styled.h2`
   margin-bottom: 2.4rem;
+  letter-spacing: 0.1rem;
   color: rgb(94, 108, 132);
 `;

@@ -27,9 +27,10 @@ const Container = styled.div`
 
 const Header = styled.header`
   width: 100%;
-  padding: 5rem 0;
-  background: url(${logo}) no-repeat center;
+  height: 10rem;
+  background: url(${logo}) no-repeat;
   background-size: 8rem;
+  background-position: center;
 `;
 
 const ShadowCard = styled(Card)`
