@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import styled from '@emotion/styled';
 
 import { Row } from 'components/UI/Row';
+import { ContentContainer } from 'components/UI/ContentContainer';
 
 export const ScreenContainer = () => {
   return (
@@ -65,12 +66,4 @@ const Main = styled.main`
   display: flex;
   overflow: hidden;
   border: 1px solid green;
-`;
-
-const ContentContainer = styled.div`
-  width: 1200px;
-  display: flex;
-  flex-direction: column;
-  padding: 3.2rem;
-  border: 1px solid red;
 `;

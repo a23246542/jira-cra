@@ -1,4 +1,17 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
-PATH="/Users/samyang/.nvm/versions/node/v14.17.3/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin"
+
+export NVM_DIR="$HOME/.nvm/nvm.sh"
+. "$(dirname $NVM_DIR)/nvm.sh"
+
+export NVM_DIR="$HOME/.nvm"
+a=$(nvm ls | grep 'node')
+b=${a#*(-> }
+v=${b%%[)| ]*}
+
+export PATH="$NVM_DIR/versions/node/$v/bin:$PATH"
+
+
 npx lint-staged
+
+
