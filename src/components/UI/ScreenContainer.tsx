@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 import styled from '@emotion/styled';
 
@@ -6,6 +7,12 @@ import { Row } from 'components/UI/Row';
 import { ContentContainer } from 'components/UI/ContentContainer';
 
 export const ScreenContainer = () => {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+    });
+  }, [location.pathname]);
   return (
     <Container>
       <PageHeader />
