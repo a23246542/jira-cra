@@ -3,17 +3,31 @@ import { Select } from 'antd';
 
 type SelectProps = React.ComponentProps<typeof Select>;
 
-interface IdSelectProps extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
+interface IdSelectProps
+  extends Omit<SelectProps, 'value' | 'onChange' | 'options'> {
   value: string | number | undefined | null;
   onChange?: (value?: number) => void;
   options?: Array<{ name: string; id: number }>;
   defaultOptionName?: string;
 }
 
-export const IdSelect = ({ value, options, defaultOptionName, onChange }: IdSelectProps) => {
+export const IdSelect = ({
+  value,
+  options,
+  defaultOptionName,
+  onChange,
+}: IdSelectProps) => {
+  const numberValue = toNumber(value);
+
+  const handleSelectChange = (value: unknown) => {
+    onChange?.(toNumber(value));
+  };
+
   return (
-    <Select value={toNumber(value)} onChange={(value) => onChange?.(toNumber(value) || undefined)}>
-      <Select.Option value={0}>{defaultOptionName}</Select.Option>
+    <Select value={numberValue} onChange={handleSelectChange}>
+      <Select.Option value={0}>
+        {defaultOptionName || '請選擇'}
+      </Select.Option>
       {options?.map((option) => (
         <Select.Option key={option.id} value={option.id}>
           {option.name}
@@ -23,4 +37,5 @@ export const IdSelect = ({ value, options, defaultOptionName, onChange }: IdSele
   );
 };
 
-const toNumber = (value: unknown): number => (isNaN(Number(value)) ? 0 : Number(value));
+const toNumber = (value: unknown): number =>
+  isNaN(Number(value)) ? 0 : Number(value);
