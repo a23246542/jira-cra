@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button,Typography } from 'antd';
 import styled from '@emotion/styled';
 
 import { Row } from 'components/UI/Row';
-import { ContentContainer } from 'components/UI/ContentContainer';
+
+import {ReactComponent as SofewareLogo} from 'assets/software-logo.svg'
+import colors from 'theme/color';
 
 export const ScreenContainer = () => {
   const location = useLocation();
@@ -17,9 +19,7 @@ export const ScreenContainer = () => {
     <Container>
       <PageHeader />
       <Main>
-        <ContentContainer>
-          <Outlet />
-        </ContentContainer>
+        <Outlet />
       </Main>
     </Container>
   );
@@ -29,9 +29,9 @@ const PageHeader = () => (
   <Header>
     <HeaderContentContainer between>
       <HeaderLeft spacing={true}>
-        <h2>logo</h2>
-        <h2>用戶</h2>
-        <h2>列表</h2>
+        <SofewareLogo width="18rem" color={colors.primary}/>
+        <Typography.Text>專案</Typography.Text>
+        <Typography.Text>組員</Typography.Text>
       </HeaderLeft>
       <HeaderRight>
         <Button>登出</Button>
@@ -57,8 +57,8 @@ const Header = styled.header`
 
 const HeaderContentContainer = styled(Row)`
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding-left: 3.2rem;
+  padding-right: 3.2rem;
 `;
 
 const HeaderLeft = styled(Row)`
@@ -70,7 +70,6 @@ const HeaderRight = styled(Row)`
 `;
 
 const Main = styled.main`
-  display: flex;
+  display: flex;// 使子內容滿高
   overflow: hidden;
-  border: 1px solid green;
 `;
