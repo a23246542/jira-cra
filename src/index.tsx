@@ -3,17 +3,16 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { loadDevTools } from 'jira-dev-tool';
-import { Provider } from 'react-redux';
-import { store } from 'redux/store';
+import { AppProvider } from 'provider';
 
 import 'antd/dist/antd.less';
 
 loadDevTools(() => {
   ReactDOM.render(
     <React.StrictMode>
-      <Provider store={store}>
+      <AppProvider>
         <App />
-      </Provider>
+      </AppProvider>
     </React.StrictMode>,
     document.getElementById('root'),
   );

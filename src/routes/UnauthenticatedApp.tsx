@@ -1,14 +1,6 @@
-import {
-  useRoutes,
-  RouteObject,
-  Navigate,
-} from 'react-router-dom';
+import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 import { AuthScreen } from 'screens';
-import { AuthProvider } from 'provider';
-import {
-  AuthScreenContainer,
-  ScreenContainer,
-} from 'components/UI';
+import { AuthScreenContainer } from 'components/UI';
 
 const routes: Array<RouteObject> = [
   {

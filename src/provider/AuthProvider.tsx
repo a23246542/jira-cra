@@ -6,17 +6,11 @@ interface IAuthProvider {
 }
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
-  const isLogin = false;
+  // const isLogin = false;
 
-  if (!isLogin) {
-    return <Navigate to="/auth" replace />;
-  }
+  // if (!isLogin) {
+  //   return <Navigate to="/auth" replace />;
+  // }
 
-  return (
-    <div>
-      <h1>AuthProvider</h1>
-      {/* {children} */}
-      <Outlet />
-    </div>
-  );
+  return <div>{children}</div>;
 };
