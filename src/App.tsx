@@ -1,13 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import './App.css';
 import { AuthenticatedApp, UnauthenticatedApp } from 'routes/index';
 
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/entities/auth.slice';
+import './App.css';
+
 function App() {
-  const isLogin = false;
+  const user = useSelector(selectUser);
+  // const isLogin = false;
   return (
     <Router>
-      {isLogin ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </Router>
   );
 }

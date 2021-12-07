@@ -1,12 +1,17 @@
 import { Form, Input, Button } from 'antd';
 import styled from '@emotion/styled';
 
+import { useDispatch } from 'react-redux';
+import { loginAsyncAction } from 'redux/entities/auth.slice';
+
 export const Login = () => {
+  const dispatch = useDispatch();
   const handleSubmit = (value: {
     username: string;
     password: string;
   }) => {
     console.log('login', value);
+    dispatch(loginAsyncAction(value));
   };
   return (
     <Form onFinish={handleSubmit}>
@@ -30,11 +35,7 @@ export const Login = () => {
           },
         ]}
       >
-        <Input
-          placeholder="密碼"
-          type="password"
-          id="password"
-        />
+        <Input placeholder="密碼" type="password" id="password" />
       </Form.Item>
       <Form.Item>
         <LongButton htmlType="submit" type="primary">
