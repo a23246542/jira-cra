@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Button,Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import styled from '@emotion/styled';
-
 import { Row } from 'components/UI/Row';
 
-import {ReactComponent as SofewareLogo} from 'assets/software-logo.svg'
+import { useAuth } from 'hooks/useAuth';
+
+import { ReactComponent as SofewareLogo } from 'assets/software-logo.svg';
 import colors from 'theme/color';
 
 export const ScreenContainer = () => {
@@ -25,20 +26,23 @@ export const ScreenContainer = () => {
   );
 };
 
-const PageHeader = () => (
-  <Header>
-    <HeaderContentContainer between>
-      <HeaderLeft spacing={true}>
-        <SofewareLogo width="18rem" color={colors.primary}/>
-        <Typography.Text>專案</Typography.Text>
-        <Typography.Text>組員</Typography.Text>
-      </HeaderLeft>
-      <HeaderRight>
-        <Button>登出</Button>
-      </HeaderRight>
-    </HeaderContentContainer>
-  </Header>
-);
+const PageHeader = () => {
+  const { logout } = useAuth();
+  return (
+    <Header>
+      <HeaderContentContainer between>
+        <HeaderLeft spacing={true}>
+          <SofewareLogo width="18rem" color={colors.primary} />
+          <Typography.Text>專案</Typography.Text>
+          <Typography.Text>組員</Typography.Text>
+        </HeaderLeft>
+        <HeaderRight>
+          <Button onClick={logout}>登出</Button>
+        </HeaderRight>
+      </HeaderContentContainer>
+    </Header>
+  );
+};
 
 const headerHeight = '5rem';
 
@@ -70,6 +74,6 @@ const HeaderRight = styled(Row)`
 `;
 
 const Main = styled.main`
-  display: flex;// 使子內容滿高
+  display: flex; // 使子內容滿高
   overflow: hidden;
 `;

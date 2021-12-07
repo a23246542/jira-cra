@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { IUser } from 'types/user';
+
+import { AuthForm } from 'types/common';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -21,6 +22,15 @@ const unAuthIntance = axios.create({
   headers: { 'content-Type': 'application/json' },
 });
 
+unAuthIntance.interceptors.response.use(
+  (response) => {
+    return handleUserResponse(response);
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
 const authIntance = axios.create({
   baseURL: apiUrl,
   headers: {
@@ -29,53 +39,26 @@ const authIntance = axios.create({
   },
 });
 
-unAuthIntance.interceptors.response.use(
-  (response) => {
-    // console.log('response', response);
-    return handleUserResponse(response);
+authIntance.interceptors.request.use(
+  (request) => {
+    if (!getToken()) return;
+    return request;
   },
   (error) => {
-    // console.log('攔截器error', error);
     return Promise.reject(error);
   },
 );
 
-unAuthIntance.interceptors.request.use(
-  (request) => {
-    if (!getToken()) return;
-  },
-  (error) => {},
-);
-
 export const authApi = {
-  // register: async (data: { username: string; password: string }) => {
-  //   try {
-  //     const res = await authIntance.post('register', data);
-  //     return res;
-  //   } catch (error: any) {
-  //     console.log('try catch error', error?.message);
-  //     return Promise.reject(error);
-  //   }
-  // },
-  register: async (data: { username: string; password: string }) => {
-    return await unAuthIntance.post('register', data);
+  register: async (data: AuthForm) => {
+    return await unAuthIntance.post('/register', data);
   },
-
-  // .then((res) => {
-  //   console.log('data', data);
-  //   // if(res.ok){
-
-  //   // }
-  //   return handleUserResponse(res.data);
-  // }),
-  login: async (data: { username: string; password: string }) =>
-    await unAuthIntance.post('login', data),
+  login: async (data: AuthForm) =>
+    await unAuthIntance.post('/login', data),
   logout: async () => {
     window.localStorage.removeItem(storageAuthKey);
   },
   getUserData: async () => {
-    // console.log('getUserData', token);
-
     try {
       return await authIntance.get(`${apiUrl}/me`);
     } catch (error) {

@@ -1,17 +1,13 @@
 import { Form, Input, Button } from 'antd';
 import styled from '@emotion/styled';
-
-import { useDispatch } from 'react-redux';
-import { loginAsyncAction } from 'redux/entities/auth.slice';
+import { useAuth } from 'hooks/useAuth';
+import { AuthForm } from 'types/common';
 
 export const Login = () => {
-  const dispatch = useDispatch();
-  const handleSubmit = (value: {
-    username: string;
-    password: string;
-  }) => {
-    console.log('login', value);
-    dispatch(loginAsyncAction(value));
+  const { login } = useAuth();
+
+  const handleSubmit = (value: AuthForm) => {
+    login(value);
   };
   return (
     <Form onFinish={handleSubmit}>

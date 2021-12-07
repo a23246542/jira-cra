@@ -3,12 +3,7 @@ import type { IUser } from 'types/user';
 import type { RootState, AppDispatch } from 'redux/store';
 import { authApi, getToken } from 'api/authReq';
 
-enum FetchState {
-  IDLE = 'IDLE',
-  LOADING = 'LOADING',
-  SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
-}
+import { FetchState, AuthForm } from 'types/common';
 
 interface State {
   user: IUser | null;
@@ -24,7 +19,7 @@ const initialState: State = {
 
 export const registerAsyncAction = createAsyncThunk(
   'auth/register',
-  async (data: { username: string; password: string }) => {
+  async (data: AuthForm, thunkAPI) => {
     const res = await authApi.register(data);
     console.log('register res data', res.data);
 
@@ -32,18 +27,11 @@ export const registerAsyncAction = createAsyncThunk(
   },
 );
 
-// export const logoutAsyncAction = createAsyncThunk(
-//   'auth/logout',
-//   async () => {
-//     const res = await authApi.logout();
-//     return res;
-//   },
-// );
-
 export const loginAsyncAction = createAsyncThunk(
   'auth/login',
-  async (data: { username: string; password: string }) => {
+  async (data: AuthForm) => {
     const res = await authApi.login(data);
+    console.log('login res', res);
     return res.data.user;
   },
 );
@@ -51,12 +39,8 @@ export const loginAsyncAction = createAsyncThunk(
 export const initUserAsyncAction = createAsyncThunk(
   'auth/initUser',
   async () => {
-    console.log('aaaa');
-
     let user = null;
     const token = getToken();
-    console.log('token', token);
-
     if (token) {
       const res = await authApi.getUserData();
       user = res.data.user;
@@ -128,3 +112,5 @@ export const logoutAction = () => (dispatch: AppDispatch) =>
   });
 
 export const selectUser = (state: RootState) => state.auth.user;
+export const selectUserState = (state: RootState) => state.auth.state;
+export const selectUserError = (state: RootState) => state.auth.error;

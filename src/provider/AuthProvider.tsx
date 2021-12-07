@@ -1,25 +1,31 @@
 import React, { useEffect } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
-import { authApi, getToken } from 'api/authReq';
-import { initUserAsyncAction } from 'redux/entities/auth.slice';
-import { useDispatch } from 'react-redux';
+// import { Outlet, Navigate } from 'react-router-dom';
+import {
+  initUserAsyncAction,
+  selectUser,
+  selectUserState,
+  selectUserError,
+} from 'redux/entities/auth.slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { FullPageLoading } from 'components/UI';
+import { FetchState } from 'types/common';
 
 interface IAuthProvider {
   children?: React.ReactChild;
 }
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
-  // const isLogin = false;
-
-  // if (!isLogin) {
-  //   return <Navigate to="/auth" replace />;
-  // }
-
+  const state = useSelector(selectUserState);
+  const error = useSelector(selectUserError);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(initUserAsyncAction());
-  }, []);
+  }, [dispatch]);
+
+  if (state === FetchState.IDLE || state === FetchState.LOADING) {
+    return <FullPageLoading />;
+  }
 
   return <div>{children}</div>;
 };
