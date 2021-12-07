@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { IUser } from 'types/user';
 import type { RootState, AppDispatch } from 'redux/store';
-import { authApi } from 'api';
+import { authApi, getToken } from 'api/authReq';
 
 enum FetchState {
   IDLE = 'IDLE',
@@ -26,7 +26,9 @@ export const registerAsyncAction = createAsyncThunk(
   'auth/register',
   async (data: { username: string; password: string }) => {
     const res = await authApi.register(data);
-    return res.data;
+    console.log('register res data', res.data);
+
+    return res.data.user;
   },
 );
 
@@ -42,7 +44,24 @@ export const loginAsyncAction = createAsyncThunk(
   'auth/login',
   async (data: { username: string; password: string }) => {
     const res = await authApi.login(data);
-    return res;
+    return res.data.user;
+  },
+);
+
+export const initUserAsyncAction = createAsyncThunk(
+  'auth/initUser',
+  async () => {
+    console.log('aaaa');
+
+    let user = null;
+    const token = getToken();
+    console.log('token', token);
+
+    if (token) {
+      const res = await authApi.getUserData();
+      user = res.data.user;
+    }
+    return user;
   },
 );
 
@@ -60,6 +79,8 @@ export const authSlice = createSlice({
       state.state = FetchState.LOADING;
     },
     [registerAsyncAction.fulfilled.type]: (state, action) => {
+      console.log('register payload', action.payload);
+
       state.state = FetchState.SUCCESS;
       state.user = action.payload;
       state.error = null;
@@ -79,6 +100,19 @@ export const authSlice = createSlice({
       state.error = null;
     },
     [loginAsyncAction.rejected.type]: (state, action) => {
+      state.state = FetchState.FAILED;
+      state.user = null;
+      state.error = action.error;
+    },
+    [initUserAsyncAction.pending.type]: (state, action) => {
+      state.state = FetchState.LOADING;
+    },
+    [initUserAsyncAction.fulfilled.type]: (state, action) => {
+      state.state = FetchState.SUCCESS;
+      state.user = action.payload;
+      state.error = null;
+    },
+    [initUserAsyncAction.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       state.user = null;
       state.error = action.error;

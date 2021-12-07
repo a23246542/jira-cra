@@ -13,14 +13,23 @@ const handleUserResponse = (res: AxiosResponse) => {
   return res;
 };
 
-const getIdToken = window.localStorage.getItem(storageAuthKey);
+export const getToken = () =>
+  window.localStorage.getItem(storageAuthKey);
 
-const authIntance = axios.create({
+const unAuthIntance = axios.create({
   baseURL: apiUrl,
   headers: { 'content-Type': 'application/json' },
 });
 
-authIntance.interceptors.response.use(
+const authIntance = axios.create({
+  baseURL: apiUrl,
+  headers: {
+    Authorization: `Bearer ${getToken()}`,
+    'content-Type': 'application/json',
+  },
+});
+
+unAuthIntance.interceptors.response.use(
   (response) => {
     // console.log('response', response);
     return handleUserResponse(response);
@@ -29,6 +38,13 @@ authIntance.interceptors.response.use(
     // console.log('攔截器error', error);
     return Promise.reject(error);
   },
+);
+
+unAuthIntance.interceptors.request.use(
+  (request) => {
+    if (!getToken()) return;
+  },
+  (error) => {},
 );
 
 export const authApi = {
@@ -42,7 +58,7 @@ export const authApi = {
   //   }
   // },
   register: async (data: { username: string; password: string }) => {
-    return await authIntance.post('register', data);
+    return await unAuthIntance.post('register', data);
   },
 
   // .then((res) => {
@@ -53,8 +69,18 @@ export const authApi = {
   //   return handleUserResponse(res.data);
   // }),
   login: async (data: { username: string; password: string }) =>
-    await authIntance.post('login', data),
+    await unAuthIntance.post('login', data),
   logout: async () => {
     window.localStorage.removeItem(storageAuthKey);
+  },
+  getUserData: async () => {
+    // console.log('getUserData', token);
+
+    try {
+      return await authIntance.get(`${apiUrl}/me`);
+    } catch (error) {
+      window.localStorage.removeItem(storageAuthKey);
+      return Promise.reject(error);
+    }
   },
 };
