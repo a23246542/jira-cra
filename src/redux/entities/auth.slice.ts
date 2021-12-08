@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { IUser } from 'types/user';
 import type { RootState, AppDispatch } from 'redux/store';
-import { authApi, getToken } from 'api/authReq';
+import { authApi } from 'api/authReq';
+import { getToken } from 'api/instance';
 
 import { FetchState, AuthForm } from 'types/common';
 
