@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   useSearchParams,
   URLSearchParamsInit,
@@ -9,16 +9,17 @@ export const useUrlQueryParams = <K extends string>(
   keys: Array<K>,
 ) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [keysState] = useState(keys);
 
   const paramsObj = useMemo(() => {
-    const obj = keys.reduce((pre, key) => {
+    const obj = keysState.reduce((pre, key) => {
       return {
         ...pre,
         [key]: searchParams.get(key) || undefined,
       };
     }, {} as { [key in K]: string });
     return obj;
-  }, [keys, searchParams]);
+  }, [keysState, searchParams]);
 
   return [
     paramsObj,
