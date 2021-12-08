@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Row = styled.div<{
-  spacing?: number | boolean;
+  gap?: number | boolean;
   between?: boolean;
   marginBottom?: number;
 }>`
@@ -10,11 +10,12 @@ export const Row = styled.div<{
   justify-content: ${(props) =>
     props.between ? 'space-between' : undefined};
   margin-bottom: ${(props) => props.marginBottom};
-  > :not(:first-child) {
+  /* > :not(:first-child) { */
+  > :first-of-type ~ * {
     margin-left: ${(props) =>
-      typeof props.spacing === 'number'
-        ? props.spacing + 'rem'
-        : props.spacing
+      typeof props.gap === 'number'
+        ? props.gap + 'rem'
+        : props.gap
         ? '2rem'
         : undefined};
   }

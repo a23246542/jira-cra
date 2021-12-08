@@ -31,7 +31,7 @@ const PageHeader = () => {
   return (
     <Header>
       <HeaderContentContainer between>
-        <HeaderLeft spacing={true}>
+        <HeaderLeft gap>
           <SofewareLogo width="18rem" color={colors.primary} />
           <Typography.Text>專案</Typography.Text>
           <Typography.Text>組員</Typography.Text>

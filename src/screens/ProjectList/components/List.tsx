@@ -8,6 +8,7 @@ export const List = () => {
   return (
     <div>
       <Table
+        rowKey="id"
         dataSource={projects}
         columns={[
           {
@@ -19,8 +20,8 @@ export const List = () => {
             title: '負責人',
             render(value, project) {
               return (
-                users.find((user) => user.id === project.id)
-                  ?.name || '未知'
+                users.find((user) => user.id === project.id)?.name ||
+                '未知'
               );
             },
           },
