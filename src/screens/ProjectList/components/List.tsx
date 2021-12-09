@@ -1,15 +1,16 @@
-import { Table } from 'antd';
-import { IProject } from 'types/project';
+import { Table, TableProps } from 'antd';
+import { IProject, IUser } from 'types';
 
-// import db from 'db.json';
-// const {Users} = db;
+interface ListProps extends TableProps<IProject> {
+  users: Array<IUser>;
+}
 
-export const List = () => {
+export const List = ({ users, dataSource }: ListProps) => {
   return (
     <div>
       <Table
         rowKey="id"
-        dataSource={projects}
+        dataSource={dataSource}
         columns={[
           {
             title: '名稱',
@@ -20,8 +21,9 @@ export const List = () => {
             title: '負責人',
             render(value, project) {
               return (
-                users.find((user) => user.id === project.id)?.name ||
-                '未知'
+                (users || []).find(
+                  (user) => user.id === project.personId,
+                )?.name || '未知'
               );
             },
           },

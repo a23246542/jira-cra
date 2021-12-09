@@ -1,20 +1,22 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
-import { Form, Input, Select } from 'antd';
+import { Form, Input } from 'antd';
 
 import { IProject } from 'types/project';
 import { IUser } from 'types/user';
 
 import { IdSelect } from './IdSelect';
-import db from 'db.json';
 
 interface ISearchPanel {
-  // users:Array<IUser>
+  users: Array<IUser>;
   params: Partial<Pick<IProject, 'name' | 'personId'>>;
   setParams: (params: ISearchPanel['params']) => void;
 }
 
-export const SearchPanel = ({ params, setParams }: ISearchPanel) => {
+export const SearchPanel = ({
+  users,
+  params,
+  setParams,
+}: ISearchPanel) => {
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -38,7 +40,7 @@ export const SearchPanel = ({ params, setParams }: ISearchPanel) => {
       <Form.Item>
         <IdSelect
           value={params.personId}
-          options={db.users}
+          options={users}
           defaultOptionName="負責人"
           onChange={handlePersonIdChange}
         />

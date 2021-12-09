@@ -6,13 +6,13 @@ import { getToken } from 'api/instance';
 
 import { FetchState, AuthForm } from 'types/common';
 
-interface State {
+interface AuthSliceState {
   user: IUser | null;
   state: FetchState;
   error: Error | null;
 }
 
-const initialState: State = {
+const initialState: AuthSliceState = {
   user: null,
   state: FetchState.IDLE,
   error: null,
@@ -22,8 +22,6 @@ export const registerAsyncAction = createAsyncThunk(
   'auth/register',
   async (data: AuthForm, thunkAPI) => {
     const res = await authApi.register(data);
-    console.log('register res data', res.data);
-
     return res.data.user;
   },
 );
