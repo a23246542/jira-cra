@@ -17,10 +17,26 @@ const initialState: ProjectSliceState = {
   error: null,
 };
 
+export const getProjectListAsync = createAsyncThunk(
+  'project/getProjectListAsync',
+  async (params: Partial<IProject>) => {
+    const res = await projectApi.getProjects(params);
+    return res.data;
+  },
+);
+
 export const getProjectAsync = createAsyncThunk(
   'project/getProjectAsync',
+  async (id: number) => {
+    const res = await projectApi.getProject(id);
+    return res.data;
+  },
+);
+
+export const editProjectAsync = createAsyncThunk(
+  'project/editProjectAsync',
   async (params: Partial<IProject>) => {
-    const res = await projectApi.getProjectData(params);
+    const res = await projectApi.updateProject(params);
     return res.data;
   },
 );
@@ -28,12 +44,17 @@ export const getProjectAsync = createAsyncThunk(
 export const projectSlice = createSlice({
   name: 'project',
   initialState,
-  reducers: {},
-  extraReducers: {
-    [getProjectAsync.pending.type]: (state, action) => {
-      state.state = FetchState.LOADING;
+  reducers: {
+    setProject(state, action) {
+      state.projects = action.payload;
     },
-    [getProjectAsync.fulfilled.type]: (state, action) => {
+  },
+  extraReducers: {
+    [getProjectListAsync.pending.type]: (state, action) => {
+      state.state = FetchState.LOADING;
+      state.error = null;
+    },
+    [getProjectListAsync.fulfilled.type]: (state, action) => {
       state.state = FetchState.SUCCESS;
       if (!Array.isArray(action.payload)) {
         console.error('project payload 錯誤');
@@ -41,10 +62,34 @@ export const projectSlice = createSlice({
       state.projects = action.payload;
       state.error = null;
     },
-    [getProjectAsync.rejected.type]: (state, action) => {
+    [getProjectListAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       state.projects = [];
-      state.error = action.error;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
+    [editProjectAsync.pending.type]: (state, action) => {
+      state.state = FetchState.LOADING;
+      state.error = null;
+    },
+    [editProjectAsync.fulfilled.type]: (state, action) => {
+      state.state = FetchState.SUCCESS;
+      const targetIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.id,
+      );
+      state.projects[targetIndex] = action.payload;
+      state.error = null;
+    },
+    [editProjectAsync.rejected.type]: (state, action) => {
+      state.state = FetchState.FAILED;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
     },
   },
 });

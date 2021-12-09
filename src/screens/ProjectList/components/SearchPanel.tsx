@@ -4,7 +4,7 @@ import { Form, Input } from 'antd';
 import { IProject } from 'types/project';
 import { IUser } from 'types/user';
 
-import { IdSelect } from './IdSelect';
+import { IdSelect } from '../../../components/IdSelect';
 
 interface ISearchPanel {
   users: Array<IUser>;

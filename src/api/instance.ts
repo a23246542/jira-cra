@@ -43,6 +43,7 @@ authIntance.interceptors.request.use(
     return request;
   },
   (error) => {
+    console.error('api有誤', error);
     return Promise.reject(error);
   },
 );
@@ -55,6 +56,7 @@ authIntance.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.error('api失敗', error);
     return Promise.reject(error);
   },
 );

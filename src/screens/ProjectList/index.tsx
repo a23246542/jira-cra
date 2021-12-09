@@ -4,7 +4,7 @@ import { ContentContainer } from 'components/UI';
 import { useProjectSearchParams } from './hooks/useProjectSearchParams';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  getProjectAsync,
+  getProjectListAsync,
   selectProject,
 } from 'redux/entities/project.slice';
 import { getUserAsync, selectUsers } from 'redux/entities/user.slice';
@@ -16,7 +16,7 @@ export const ProjectListScreen = () => {
   const { projects, state } = useSelector(selectProject);
 
   useEffect(() => {
-    dispatch(getProjectAsync(searchParams));
+    dispatch(getProjectListAsync(searchParams));
   }, [searchParams, dispatch]);
 
   useEffect(() => {
