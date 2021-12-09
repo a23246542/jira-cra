@@ -8,6 +8,7 @@ import {
   selectProject,
 } from 'redux/entities/project.slice';
 import { getUserAsync, selectUsers } from 'redux/entities/user.slice';
+import { ProjectModal } from './components';
 
 export const ProjectListScreen = () => {
   const [searchParams, setSearchParams] = useProjectSearchParams();
@@ -31,15 +32,18 @@ export const ProjectListScreen = () => {
   }, [dispatch]);
 
   return (
-    <ContentContainer>
-      <h1>項目列表</h1>
-      <SearchPanel
-        users={users}
-        params={searchParams}
-        setParams={setSearchParams}
-      />
-      <List dataSource={projects} users={users} />
-    </ContentContainer>
+    <>
+      <ContentContainer>
+        <h1>專案列表</h1>
+        <SearchPanel
+          users={users}
+          params={searchParams}
+          setParams={setSearchParams}
+        />
+        <List dataSource={projects} users={users} />
+      </ContentContainer>
+      <ProjectModal />
+    </>
   );
 };
 

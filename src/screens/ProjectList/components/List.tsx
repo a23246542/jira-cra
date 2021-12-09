@@ -1,8 +1,9 @@
-import { Table, TableProps } from 'antd';
+import { Table, Dropdown, Button, Menu, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch } from 'react-redux';
 import { Pin } from 'components/Pin';
 import { editProjectAsync } from 'redux/entities/project.slice';
+import { ButtonNoPadding } from 'components/UI';
 import { IProject, IUser } from 'types';
 
 interface ListProps extends TableProps<IProject> {
@@ -62,9 +63,29 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
               );
             },
           },
+          {
+            render(value, project) {
+              return <More project={project} />;
+            },
+          },
         ]}
         pagination={false}
       />
     </div>
+  );
+};
+
+const More = ({ project }: { project: IProject }) => {
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key="edit">編輯</Menu.Item>
+          <Menu.Item key="delete">刪除</Menu.Item>
+        </Menu>
+      }
+    >
+      <ButtonNoPadding type="link">...</ButtonNoPadding>
+    </Dropdown>
   );
 };
