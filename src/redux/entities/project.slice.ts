@@ -10,6 +10,7 @@ interface ProjectSliceState {
   projects: Array<IProject>;
   currentProject: IProject | null;
   state: FetchState;
+  mutateState: FetchState;
   error: Error | null;
 }
 
@@ -17,6 +18,7 @@ const initialState: ProjectSliceState = {
   projects: [],
   currentProject: null,
   state: FetchState.IDLE,
+  mutateState: FetchState.IDLE,
   error: null,
 };
 
@@ -112,11 +114,11 @@ export const projectSlice = createSlice({
       }
     },
     [editProjectAsync.pending.type]: (state, action) => {
-      state.state = FetchState.LOADING;
+      state.mutateState = FetchState.LOADING;
       state.error = null;
     },
     [editProjectAsync.fulfilled.type]: (state, action) => {
-      state.state = FetchState.SUCCESS;
+      state.mutateState = FetchState.SUCCESS;
       const targetIndex = state.projects.findIndex(
         (project) => project.id === action.payload.id,
       );
@@ -124,7 +126,7 @@ export const projectSlice = createSlice({
       state.error = null;
     },
     [editProjectAsync.rejected.type]: (state, action) => {
-      state.state = FetchState.FAILED;
+      state.mutateState = FetchState.FAILED;
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -132,15 +134,15 @@ export const projectSlice = createSlice({
       }
     },
     [addProjectAsync.pending.type]: (state, action) => {
-      state.state = FetchState.LOADING;
+      state.mutateState = FetchState.LOADING;
       state.error = null;
     },
     [addProjectAsync.fulfilled.type]: (state, action) => {
-      state.state = FetchState.SUCCESS;
+      state.mutateState = FetchState.SUCCESS;
       state.error = null;
     },
     [addProjectAsync.rejected.type]: (state, action) => {
-      state.state = FetchState.FAILED;
+      state.mutateState = FetchState.FAILED;
       if (action.payload) {
         state.error = action.payload;
       } else {

@@ -14,8 +14,13 @@ import { addProjectRequestParams } from 'api/projectReq';
 type FormValue = addProjectRequestParams;
 
 export const ProjectModal = () => {
-  const { isOpen, close, editingProject, isLoading } =
-    useProjectModal();
+  const {
+    isOpen,
+    close,
+    editingProject,
+    isLoading,
+    isMutateLoading,
+  } = useProjectModal();
   const dispatch = useAppDispatch();
 
   const title = editingProject ? '編輯專案' : '新增專案';
@@ -45,6 +50,7 @@ export const ProjectModal = () => {
       dispatch(addProjectAsync(value))
         .unwrap()
         .then(() => {
+          form.resetFields();
           close();
         });
     }
@@ -97,7 +103,7 @@ export const ProjectModal = () => {
 
               <Form.Item style={{ textAlign: 'right' }}>
                 <Button
-                  loading={false}
+                  loading={isMutateLoading}
                   type="primary"
                   htmlType="submit"
                 >

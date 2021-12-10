@@ -13,8 +13,11 @@ import { FetchState } from 'types';
 export const useProjectModal = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(selectProjectModalOpen);
-  const { currentProject: editingProject, state } =
-    useSelector(selectProject);
+  const {
+    currentProject: editingProject,
+    state,
+    mutateState,
+  } = useSelector(selectProject);
 
   const startEdit = useCallback(
     (id: number) => {
@@ -39,5 +42,6 @@ export const useProjectModal = () => {
     close,
     editingProject,
     isLoading: state === FetchState.LOADING,
+    isMutateLoading: mutateState === FetchState.LOADING,
   };
 };
