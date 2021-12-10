@@ -9,7 +9,8 @@ export const Row = styled.div<{
   align-items: center;
   justify-content: ${(props) =>
     props.between ? 'space-between' : undefined};
-  margin-bottom: ${(props) => props.marginBottom};
+  margin-bottom: ${(props) =>
+    props.marginBottom ? `${props.marginBottom}rem` : undefined};
   /* > :not(:first-child) { */
   > :first-of-type ~ * {
     margin-left: ${(props) =>

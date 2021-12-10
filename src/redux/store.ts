@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from './entities/auth.slice';
 import { projectSlice } from './entities/project.slice';
 import { userSlice } from './entities/user.slice';
+import { projectScreenSlice } from './projectScreen';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,6 +11,7 @@ const rootReducer = {
   auth: authSlice.reducer,
   project: projectSlice.reducer,
   user: userSlice.reducer,
+  projectScreen: projectScreenSlice.reducer,
 };
 
 export const store = configureStore({

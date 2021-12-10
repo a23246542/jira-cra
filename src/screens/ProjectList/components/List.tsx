@@ -1,8 +1,9 @@
 import { Table, Dropdown, Button, Menu, TableProps } from 'antd';
 import dayjs from 'dayjs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Pin } from 'components/Pin';
 import { editProjectAsync } from 'redux/entities/project.slice';
+import { useProjectModal } from '../hooks/useProjectModal';
 import { ButtonNoPadding } from 'components/UI';
 import { IProject, IUser } from 'types';
 
@@ -39,7 +40,7 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
             sorter: (a, b) => a.name.localeCompare(b.name),
           },
           {
-            title: '部分',
+            title: '部門',
             dataIndex: 'organization',
           },
           {
@@ -64,6 +65,7 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
             },
           },
           {
+            title: '操作',
             render(value, project) {
               return <More project={project} />;
             },
@@ -76,11 +78,15 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
 };
 
 const More = ({ project }: { project: IProject }) => {
+  const { startEdit } = useProjectModal();
+
   return (
     <Dropdown
       overlay={
         <Menu>
-          <Menu.Item key="edit">編輯</Menu.Item>
+          <Menu.Item key="edit" onClick={() => startEdit(project.id)}>
+            編輯
+          </Menu.Item>
           <Menu.Item key="delete">刪除</Menu.Item>
         </Menu>
       }
