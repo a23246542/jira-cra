@@ -4,15 +4,19 @@ import styled from '@emotion/styled';
 import { UserSelect } from 'components/UserSelect';
 import { useProjectModal } from '../hooks/useProjectModal';
 import { useEffect } from 'react';
-import { IProject } from 'types';
-import { editProjectAsync } from 'redux/entities/project.slice';
+import {
+  addProjectAsync,
+  editProjectAsync,
+} from 'redux/entities/project.slice';
+import { useAppDispatch } from 'redux/store';
+import { addProjectRequestParams } from 'api/projectReq';
 
-type FormValue = Pick<IProject, 'name' | 'organization' | 'personId'>;
+type FormValue = addProjectRequestParams;
 
 export const ProjectModal = () => {
   const { isOpen, close, editingProject, isLoading } =
     useProjectModal();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const title = editingProject ? '編輯專案' : '新增專案';
 
@@ -31,15 +35,18 @@ export const ProjectModal = () => {
     const isEdit = !!editingProject;
 
     if (isEdit) {
-      dispatch(
-        editProjectAsync({ id: editingProject.id, ...value }),
-        //@ts-ignore
-      ).then(() => {
-        form.resetFields();
-        close();
-      });
+      dispatch(editProjectAsync({ id: editingProject.id, ...value }))
+        .unwrap()
+        .then(() => {
+          form.resetFields();
+          close();
+        });
     } else {
-      // dispatch(projectAsync(form))
+      dispatch(addProjectAsync(value))
+        .unwrap()
+        .then(() => {
+          close();
+        });
     }
   };
 
@@ -47,6 +54,7 @@ export const ProjectModal = () => {
     <Drawer
       visible={isOpen}
       onClose={handleCloseProjectModal}
+      forceRender={true}
       width="100%"
     >
       <DrawerContentContainer>

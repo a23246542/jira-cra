@@ -4,6 +4,7 @@ import { projectApi } from 'api/projectReq';
 
 import { IProject, FetchState } from 'types';
 import { RootState } from 'redux/store';
+import { addProjectRequestParams } from 'api/projectReq';
 
 interface ProjectSliceState {
   projects: Array<IProject>;
@@ -21,7 +22,7 @@ const initialState: ProjectSliceState = {
 
 export const getProjectListAsync = createAsyncThunk(
   'project/getProjectListAsync',
-  async (params: Partial<IProject>) => {
+  async (params?: Partial<IProject>) => {
     const res = await projectApi.getProjects(params);
     return res.data;
   },
@@ -46,13 +47,21 @@ export const editProjectAsync = createAsyncThunk(
   },
 );
 
-// export const editProjectAsync = createAsyncThunk(
-//   'project/editProjectAsync',
-//   async (params: Partial<IProject>) => {
-//     const res = await projectApi.updateProject(params);
-//     return res.data;
-//   },
-// );
+export const addProjectAsync = createAsyncThunk(
+  'project/addProjectAsync',
+  async (params: addProjectRequestParams, thunkAPI) => {
+    const res = await projectApi.addProject(params);
+    thunkAPI.dispatch(getProjectListAsync());
+  },
+);
+
+export const deleteProjectAsync = createAsyncThunk(
+  'project/deleteProjectAsync',
+  async (id: number, { rejectWithValue }) => {
+    await projectApi.deleteProject(id);
+    return { id };
+  },
+);
 
 export const projectSlice = createSlice({
   name: 'project',
@@ -122,26 +131,42 @@ export const projectSlice = createSlice({
         state.error = action.error;
       }
     },
-    // [editProjectAsync.pending.type]: (state, action) => {
-    //   state.state = FetchState.LOADING;
-    //   state.error = null;
-    // },
-    // [editProjectAsync.fulfilled.type]: (state, action) => {
-    //   state.state = FetchState.SUCCESS;
-    //   const targetIndex = state.projects.findIndex(
-    //     (project) => project.id === action.payload.id,
-    //   );
-    //   state.projects[targetIndex] = action.payload;
-    //   state.error = null;
-    // },
-    // [editProjectAsync.rejected.type]: (state, action) => {
-    //   state.state = FetchState.FAILED;
-    //   if (action.payload) {
-    //     state.error = action.payload;
-    //   } else {
-    //     state.error = action.error;
-    //   }
-    // },
+    [addProjectAsync.pending.type]: (state, action) => {
+      state.state = FetchState.LOADING;
+      state.error = null;
+    },
+    [addProjectAsync.fulfilled.type]: (state, action) => {
+      state.state = FetchState.SUCCESS;
+      state.error = null;
+    },
+    [addProjectAsync.rejected.type]: (state, action) => {
+      state.state = FetchState.FAILED;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
+    [deleteProjectAsync.pending.type]: (state, action) => {
+      state.state = FetchState.LOADING;
+      state.error = null;
+    },
+    [deleteProjectAsync.fulfilled.type]: (state, action) => {
+      state.state = FetchState.SUCCESS;
+      const targetIndex = state.projects.findIndex(
+        (project) => project.id === action.payload.id,
+      );
+      state.projects.splice(targetIndex, 1);
+      state.error = null;
+    },
+    [deleteProjectAsync.rejected.type]: (state, action) => {
+      state.state = FetchState.FAILED;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
   },
 });
 

@@ -2,10 +2,14 @@ import { Table, Dropdown, Button, Menu, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { Pin } from 'components/Pin';
-import { editProjectAsync } from 'redux/entities/project.slice';
+import {
+  deleteProjectAsync,
+  editProjectAsync,
+} from 'redux/entities/project.slice';
 import { useProjectModal } from '../hooks/useProjectModal';
 import { ButtonNoPadding } from 'components/UI';
 import { IProject, IUser } from 'types';
+import { useAppDispatch } from 'redux/store';
 
 interface ListProps extends TableProps<IProject> {
   users: Array<IUser>;
@@ -79,15 +83,26 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
 
 const More = ({ project }: { project: IProject }) => {
   const { startEdit } = useProjectModal();
+  const dispatch = useAppDispatch();
+
+  const handleEditProject = () => {
+    startEdit(project.id);
+  };
+
+  const handleDeleteProject = () => {
+    dispatch(deleteProjectAsync(project.id));
+  };
 
   return (
     <Dropdown
       overlay={
         <Menu>
-          <Menu.Item key="edit" onClick={() => startEdit(project.id)}>
+          <Menu.Item key="edit" onClick={handleEditProject}>
             編輯
           </Menu.Item>
-          <Menu.Item key="delete">刪除</Menu.Item>
+          <Menu.Item key="delete" onClick={handleDeleteProject}>
+            刪除
+          </Menu.Item>
         </Menu>
       }
     >
