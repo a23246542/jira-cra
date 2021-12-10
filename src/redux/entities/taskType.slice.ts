@@ -18,7 +18,7 @@ const initialState: TaskTypeSliceState = {
 };
 
 export const getTaskTypesAsync = createAsyncThunk(
-  'project/getTaskTypesAsync',
+  'taskType/getTaskTypesAsync',
   async () => {
     const res = await taskTypeApi.getTaskTypes();
     return res.data;

@@ -18,7 +18,7 @@ const initialState: KanbanSliceState = {
 };
 
 export const getKanbansAsync = createAsyncThunk(
-  'project/getKanbansAsync',
+  'kanban/getKanbansAsync',
   async (params: Partial<IKanban> | undefined, thunkAPI) => {
     const res = await kanbanApi.getKanbans(params);
     return res.data;

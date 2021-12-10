@@ -4,7 +4,7 @@ import { useAuth } from 'hooks/useAuth';
 import { Row } from './UI';
 
 import { ReactComponent as SofewareLogo } from 'assets/software-logo.svg';
-import colors from 'theme/color';
+import colors from 'theme/colors';
 
 export const AuthHeader = () => {
   const { logout } = useAuth();

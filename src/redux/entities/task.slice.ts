@@ -8,29 +8,43 @@ import { ITask } from 'types/task';
 interface TaskSliceState {
   tasks: Array<ITask>;
   state: FetchState;
+  taskProjectId: number | null;
+  fetchingTaskProjectId: number | null;
   error: Error | null;
 }
 
 const initialState: TaskSliceState = {
   tasks: [],
   state: FetchState.IDLE,
+  taskProjectId: null,
+  fetchingTaskProjectId: null,
   error: null,
 };
 
 export const getTasksAsync = createAsyncThunk(
-  'project/getTasksAsync',
-  async (params: Partial<ITask> | undefined, thunkAPI) => {
+  'task/getTasksAsync',
+  async (
+    params: Partial<ITask> & Pick<ITask, 'projectId'>,
+    thunkAPI,
+  ) => {
     const res = await taskApi.getTasks(params);
     return res.data;
   },
-  // {
-  //   condition: (_, { getState }) => {
-  //     // @ts-ignore
-  //     if (getState().kanban.kanbans.length > 0) {
-  //       return false;
-  //     }
-  //   },
-  // },
+  {
+    condition(params, { getState }) {
+      if (
+        // @ts-ignore
+        params.projectId === getState().task.fetchingTaskProjectId
+      ) {
+        return false;
+      }
+    },
+    getPendingMeta({ arg, requestId }, { getState, extra }) {
+      return {
+        projectId: arg.projectId,
+      };
+    },
+  },
 );
 
 export const taskSlice = createSlice({
@@ -40,6 +54,7 @@ export const taskSlice = createSlice({
   extraReducers: {
     [getTasksAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
+      state.fetchingTaskProjectId = action.meta.projectId;
       state.error = null;
     },
     [getTasksAsync.fulfilled.type]: (state, action) => {
@@ -62,4 +77,16 @@ export const taskSlice = createSlice({
   },
 });
 
+export const actions = taskSlice.actions;
+
 export const selectTasks = (state: RootState) => state.task.tasks;
+
+export const selectTasksByKanbanId =
+  (id: number) => (state: RootState) => {
+    console.log(
+      '重新計算',
+      state.task.tasks.filter((item) => item.kanbanId === id),
+    );
+
+    return state.task.tasks.filter((item) => item.kanbanId === id);
+  };
