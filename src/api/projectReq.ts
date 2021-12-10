@@ -1,25 +1,18 @@
+import { AxiosResponse } from 'axios';
 import { authIntance } from './instance';
 import qs from 'qs';
 import { IProject } from 'types/project';
 
-type getProjectsResponse = {
-  data: Array<IProject>;
-};
+type GetProjectsResponse = Array<IProject>;
 
-type GetProjectResponse = {
-  data: Array<IProject>;
-};
+type GetProjectResponse = Array<IProject>;
 
-type addProjectResponse = {
-  data: IProject;
-};
+type addProjectResponse = IProject;
 
-type updateProjectResponse = {
-  data: IProject;
-};
+type updateProjectResponse = IProject;
 
 type DeleteProjectResponse = {
-  data: { success: boolean };
+  success: boolean;
 };
 
 export type addProjectRequestParams = Pick<
@@ -30,23 +23,27 @@ export type addProjectRequestParams = Pick<
 export const projectApi = {
   getProjects: (
     params?: Partial<IProject>,
-  ): Promise<getProjectsResponse> => {
+  ): Promise<AxiosResponse<GetProjectsResponse>> => {
     return authIntance.get(`/projects?${qs.stringify(params)}`);
   },
-  getProject: (id: number): Promise<GetProjectResponse> => {
+  getProject: (
+    id: number,
+  ): Promise<AxiosResponse<GetProjectResponse>> => {
     return authIntance.get(`/projects?${id}`);
   },
   updateProject: (
     params: Partial<IProject> & { id: number },
-  ): Promise<updateProjectResponse> => {
+  ): Promise<AxiosResponse<addProjectResponse>> => {
     return authIntance.patch(`/projects/${params.id}`, params);
   },
   addProject: (
     params: addProjectRequestParams,
-  ): Promise<addProjectResponse> => {
+  ): Promise<AxiosResponse<updateProjectResponse>> => {
     return authIntance.post(`/projects`, params);
   },
-  deleteProject: (id: number): Promise<DeleteProjectResponse> => {
+  deleteProject: (
+    id: number,
+  ): Promise<AxiosResponse<DeleteProjectResponse>> => {
     return authIntance.delete(`/projects/${id}`);
   },
 };
