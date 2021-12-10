@@ -6,7 +6,7 @@ import logo from 'assets/logo.svg';
 import LeftBg from 'assets/login-left.svg';
 import RightBg from 'assets/login-right.svg';
 
-export const AuthScreenContainer = () => {
+export const LoginLayout = () => {
   return (
     <Container>
       <Header />

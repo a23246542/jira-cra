@@ -1,23 +1,16 @@
-import {
-  useRoutes,
-  RouteObject,
-  Navigate,
-} from 'react-router-dom';
+import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 import {
   ProjectListScreen,
   ProjectScreen,
   KanbanScreen,
   EpicScreen,
 } from 'screens';
-import {
-  AuthScreenContainer,
-  ScreenContainer,
-} from 'components/UI';
+import { MainLayout } from 'layouts/mainLayout';
 
 const routes: Array<RouteObject> = [
   {
     path: '/',
-    element: <ScreenContainer />,
+    element: <MainLayout />,
     children: [
       {
         path: 'projects',

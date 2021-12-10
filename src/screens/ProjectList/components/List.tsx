@@ -1,6 +1,7 @@
 import { Table, Dropdown, Button, Menu, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Pin } from 'components/Pin';
 import {
   deleteProjectAsync,
@@ -40,8 +41,14 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
           },
           {
             title: '名稱',
-            dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
+            render(value, project) {
+              return (
+                <Link to={`../project/${project.id}`}>
+                  {project.name}
+                </Link>
+              );
+            },
           },
           {
             title: '部門',

@@ -1,11 +1,11 @@
 import { useRoutes, RouteObject, Navigate } from 'react-router-dom';
 import { AuthScreen } from 'screens';
-import { AuthScreenContainer } from 'components/UI';
+import { LoginLayout } from 'layouts/loginLayout';
 
 const routes: Array<RouteObject> = [
   {
     path: '/',
-    element: <AuthScreenContainer />,
+    element: <LoginLayout />,
     children: [
       {
         path: '',
