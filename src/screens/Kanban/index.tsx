@@ -15,6 +15,7 @@ import {
 import { KanbanColumsn } from './components/KanbanColumsn';
 import { useKanbanSearchParams } from './hooks/useKanbanSearchParams';
 import { SearchPanel } from './components/SearchPanel';
+import { CreateKanban } from './components/CreateKanban';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ export const KanbanScreen = () => {
         {kanbans?.map((kanban) => (
           <KanbanColumsn key={kanban.id} kanban={kanban} />
         ))}
+        <CreateKanban />
       </ColumnsContainer>
     </ContentContainer>
   );

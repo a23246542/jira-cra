@@ -11,6 +11,7 @@ import { IKanban } from 'types/kanban';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
 import colors from 'theme/colors';
 import { TaskTypeIcon } from './TaskTypeIcon';
+import { CreateTask } from './CreateTask';
 
 interface IKanbanColumns {
   kanban: IKanban;
@@ -38,12 +39,13 @@ export const KanbanColumsn = ({ kanban }: IKanbanColumns) => {
             </Card>
           );
         })}
+        <CreateTask kanbanId={kanban.id} />
       </TasksContainer>
     </KanbanContainer>
   );
 };
 
-const KanbanContainer = styled.div`
+export const KanbanContainer = styled.div`
   min-width: 27rem;
   display: flex;
   flex-direction: column;
