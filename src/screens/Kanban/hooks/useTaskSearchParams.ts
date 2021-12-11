@@ -5,17 +5,17 @@ import { ITask } from 'types/task';
 
 export const useTaskSearchParams = () => {
   const { id: projectId } = useParams();
-  const [{ name, processerId, typeId }, updateParams] =
-    useUrlQueryParams(['name', 'processerId', 'typeId']);
+  const [{ name, processorId, typeId }, updateParams] =
+    useUrlQueryParams(['name', 'processorId', 'typeId']);
   return [
     useMemo(
       () => ({
         projectId: Number(projectId),
         name,
-        processerId: Number(processerId) || undefined,
+        processorId: Number(processorId) || undefined,
         typeId: Number(typeId) || undefined,
       }),
-      [projectId, name, processerId, typeId],
+      [projectId, name, processorId, typeId],
     ),
     updateParams,
   ] as const;

@@ -1,11 +1,11 @@
 import { Row } from 'components/UI';
-import { Input } from 'antd';
+import { Button, Input } from 'antd';
 import { UserSelect } from 'components/UserSelect';
 import { TaskTypeSelect } from 'components/TaskTypeSelect';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
 
 export const SearchPanel = () => {
-  const [{ name, processerId, typeId }, updateTaskParams] =
+  const [{ name, processorId, typeId }, updateTaskParams] =
     useTaskSearchParams();
 
   const handleInputChange = (
@@ -14,13 +14,22 @@ export const SearchPanel = () => {
     updateTaskParams({ name: evt.target.value });
   };
   const handleUserSelectChange = (userId: number | undefined) => {
-    updateTaskParams({ processerId: userId });
+    updateTaskParams({ processorId: userId });
   };
   const handleTaskTypeSelectChange = (
     taskTypeId: number | undefined,
   ) => {
     updateTaskParams({ typeId: taskTypeId });
   };
+
+  const handleResetBtnClick = () => {
+    updateTaskParams({
+      typeId: undefined,
+      processorId: undefined,
+      name: undefined,
+    });
+  };
+
   return (
     <Row gap marginBottom={4}>
       <Input
@@ -31,7 +40,7 @@ export const SearchPanel = () => {
       />
       <UserSelect
         defaultOptionName="經辦人"
-        value={processerId}
+        value={processorId}
         onChange={handleUserSelectChange}
       />
       <TaskTypeSelect
@@ -39,6 +48,7 @@ export const SearchPanel = () => {
         value={typeId}
         onChange={handleTaskTypeSelectChange}
       />
+      <Button onClick={handleResetBtnClick}>重置篩選器</Button>
     </Row>
   );
 };
