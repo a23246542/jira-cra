@@ -17,7 +17,9 @@ interface IKanbanColumns {
 }
 
 export const KanbanColumsn = ({ kanban }: IKanbanColumns) => {
-  const taskParams = useTaskSearchParams();
+  const [taskParams] = useTaskSearchParams();
+  console.log('taskParams', taskParams);
+
   const dispatch = useAppDispatch();
   const tasks = useSelector(selectTasksByKanbanId(kanban.id));
 
