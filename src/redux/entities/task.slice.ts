@@ -32,6 +32,10 @@ export const getTasksAsync = createAsyncThunk(
   },
   {
     condition(params, { getState }) {
+      //@ts-ignore
+      if (getState().task.tasks.length > 0) {
+        return false;
+      }
       if (
         // @ts-ignore
         params.projectId === getState().task.fetchingTaskProjectId
@@ -64,10 +68,12 @@ export const taskSlice = createSlice({
       }
       state.tasks = action.payload;
       state.error = null;
+      state.fetchingTaskProjectId = null;
     },
     [getTasksAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       state.tasks = [];
+      state.fetchingTaskProjectId = null;
       if (action.payload) {
         state.error = action.payload;
       } else {

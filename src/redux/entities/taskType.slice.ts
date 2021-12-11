@@ -23,14 +23,18 @@ export const getTaskTypesAsync = createAsyncThunk(
     const res = await taskTypeApi.getTaskTypes();
     return res.data;
   },
-  // {
-  //   condition: (_, { getState }) => {
-  //     // @ts-ignore
-  //     if (getState().kanban.kanbans.length > 0) {
-  //       return false;
-  //     }
-  //   },
-  // },
+  {
+    condition(_, { getState }) {
+      //@ts-ignore
+      if (getState().taskType.taskTypes.length > 0) {
+        return false;
+      }
+      //@ts-ignore
+      if (getState().taskType.state === FetchState.LOADING) {
+        return false;
+      }
+    },
+  },
 );
 
 export const taskTypeSlice = createSlice({

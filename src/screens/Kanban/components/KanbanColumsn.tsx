@@ -10,6 +10,7 @@ import { useAppDispatch } from 'redux/store';
 import { IKanban } from 'types/kanban';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
 import colors from 'theme/colors';
+import { TaskTypeIcon } from './TaskTypeIcon';
 
 interface IKanbanColumns {
   kanban: IKanban;
@@ -31,7 +32,8 @@ export const KanbanColumsn = ({ kanban }: IKanbanColumns) => {
         {tasks?.map((task) => {
           return (
             <Card key={task.id} style={{ marginBottom: '.5rem' }}>
-              {task.name}
+              <div>{task.name}</div>
+              <TaskTypeIcon typeId={task.typeId} />
             </Card>
           );
         })}
