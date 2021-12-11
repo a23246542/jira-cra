@@ -34,6 +34,7 @@ const Container = styled.div`
 
 const Main = styled.div`
   display: flex;
+  overflow: hidden;
   box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1); // 只呈現左邊陰影效果
 `;
 
