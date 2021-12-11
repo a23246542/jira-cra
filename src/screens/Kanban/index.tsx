@@ -14,6 +14,7 @@ import {
 } from 'redux/entities/project.slice';
 import { KanbanColumsn } from './components/KanbanColumsn';
 import { useKanbanSearchParams } from './hooks/useKanbanSearchParams';
+import { SearchPanel } from './components/SearchPanel';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -33,6 +34,7 @@ export const KanbanScreen = () => {
   return (
     <ContentContainer>
       <h1>{currentProject?.name}</h1>
+      <SearchPanel />
       <ColumnsContainer>
         {kanbans?.map((kanban) => (
           <KanbanColumsn key={kanban.id} kanban={kanban} />
