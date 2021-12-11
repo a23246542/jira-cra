@@ -32,10 +32,6 @@ export const getTasksAsync = createAsyncThunk(
   },
   {
     condition(params, { getState }) {
-      //@ts-ignore
-      if (getState().task.tasks.length > 0) {
-        return false;
-      }
       if (
         // @ts-ignore
         params.projectId === getState().task.fetchingTaskProjectId
