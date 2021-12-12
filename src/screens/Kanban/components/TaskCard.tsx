@@ -1,9 +1,10 @@
-import { Card } from 'antd';
+import { Card, Typography } from 'antd';
 import { useTaskModal } from '../hooks/useTaskModal';
 import { ITask } from 'types/task';
 import { TaskTypeIcon } from './TaskTypeIcon';
 import { MarkWord } from 'components/MarkWord';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
+import styled from '@emotion/styled';
 
 interface ITaskCard {
   task: ITask;
@@ -23,7 +24,11 @@ export const TaskCard = ({ task }: ITaskCard) => {
       onClick={handleTaskCardClick}
       style={{ marginBottom: '.5rem' }}
     >
-      <MarkWord name={task.name} keyword={keyword} />
+      <div>
+        <Typography.Text ellipsis>
+          <MarkWord name={task.name} keyword={keyword} />
+        </Typography.Text>
+      </div>
       <TaskTypeIcon typeId={task.typeId} />
     </Card>
   );
