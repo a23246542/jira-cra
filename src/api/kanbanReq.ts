@@ -5,7 +5,7 @@ import { IKanban } from 'types/kanban';
 
 type GetKanbansResponse = Array<IKanban>;
 
-type GetKanbanResponse = Array<IKanban>;
+type GetKanbanResponse = IKanban;
 
 type createKanbanResponse = IKanban;
 

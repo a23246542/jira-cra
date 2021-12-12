@@ -5,7 +5,7 @@ import { IProject } from 'types/project';
 
 type GetProjectsResponse = Array<IProject>;
 
-type GetProjectResponse = Array<IProject>;
+type GetProjectResponse = IProject;
 
 type addProjectResponse = IProject;
 
@@ -29,7 +29,7 @@ export const projectApi = {
   getProject: (
     id: number,
   ): Promise<AxiosResponse<GetProjectResponse>> => {
-    return authIntance.get(`/projects?${id}`);
+    return authIntance.get(`/projects/${id}`);
   },
   updateProject: (
     params: Partial<IProject> & { id: number },

@@ -7,19 +7,23 @@ import { ITask } from 'types/task';
 
 interface TaskSliceState {
   tasks: Array<ITask>;
+  currentTask: ITask | null;
   state: FetchState;
   mutateState: FetchState;
+  currentTaskState: FetchState;
   taskProjectId: number | null;
-  fetchingTaskProjectId: number | null;
+  fetchingTasksProjectId: number | null;
   error: Error | null;
 }
 
 const initialState: TaskSliceState = {
   tasks: [],
+  currentTask: null,
   state: FetchState.IDLE,
   mutateState: FetchState.IDLE,
+  currentTaskState: FetchState.IDLE,
   taskProjectId: null,
-  fetchingTaskProjectId: null,
+  fetchingTasksProjectId: null,
   error: null,
 };
 
@@ -36,7 +40,7 @@ export const getTasksAsync = createAsyncThunk(
     condition(params, { getState }) {
       if (
         // @ts-ignore
-        params.projectId === getState().task.fetchingTaskProjectId
+        params.projectId === getState().task.fetchingTasksProjectId
       ) {
         return false;
       }
@@ -46,6 +50,14 @@ export const getTasksAsync = createAsyncThunk(
         projectId: arg.projectId,
       };
     },
+  },
+);
+
+export const getTaskAsync = createAsyncThunk(
+  'project/getTaskAsync',
+  async (id: number) => {
+    const res = await taskApi.getTask(id);
+    return res.data;
   },
 );
 
@@ -64,7 +76,7 @@ export const taskSlice = createSlice({
   extraReducers: {
     [getTasksAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
-      state.fetchingTaskProjectId = action.meta.projectId;
+      state.fetchingTasksProjectId = action.meta.projectId;
       state.error = null;
     },
     [getTasksAsync.fulfilled.type]: (state, action) => {
@@ -74,12 +86,31 @@ export const taskSlice = createSlice({
       }
       state.tasks = action.payload;
       state.error = null;
-      state.fetchingTaskProjectId = null;
+      state.fetchingTasksProjectId = null;
     },
     [getTasksAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
-      state.tasks = [];
-      state.fetchingTaskProjectId = null;
+      // state.tasks = [];
+      state.fetchingTasksProjectId = null;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
+    [getTaskAsync.pending.type]: (state, action) => {
+      state.currentTaskState = FetchState.LOADING;
+      state.currentTask = null;
+      state.error = null;
+    },
+    [getTaskAsync.fulfilled.type]: (state, action) => {
+      state.currentTaskState = FetchState.SUCCESS;
+      state.currentTask = action.payload;
+      state.error = null;
+    },
+    [getTaskAsync.rejected.type]: (state, action) => {
+      state.currentTaskState = FetchState.FAILED;
+      state.currentTask = null;
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -110,12 +141,18 @@ export const actions = taskSlice.actions;
 
 export const selectTasks = (state: RootState) => state.task.tasks;
 
+export const selectCurrentTask = (state: RootState) =>
+  state.task.currentTask;
+
+export const selectCurrentTaskState = (state: RootState) =>
+  state.task.currentTaskState;
+
 export const selectTasksByKanbanId =
   (id: number) => (state: RootState) => {
-    console.log(
-      '重新計算',
-      state.task.tasks.filter((item) => item.kanbanId === id),
-    );
+    // console.log(
+    //   '重新計算',
+    //   state.task.tasks.filter((item) => item.kanbanId === id),
+    // );
 
     return state.task.tasks.filter((item) => item.kanbanId === id);
   };

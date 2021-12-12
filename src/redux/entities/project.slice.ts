@@ -26,6 +26,9 @@ export const getProjectListAsync = createAsyncThunk(
   'project/getProjectListAsync',
   async (params?: Partial<IProject>) => {
     const res = await projectApi.getProjects(params);
+    if (!Array.isArray(res.data)) {
+      return Promise.reject(new Error('get project資料回傳非陣列'));
+    }
     return res.data;
   },
 );
@@ -34,10 +37,7 @@ export const getProjectAsync = createAsyncThunk(
   'project/getProjectAsync',
   async (id: number) => {
     const res = await projectApi.getProject(id);
-    if (!Array.isArray(res.data)) {
-      return Promise.reject(new Error('get project資料回傳非陣列'));
-    }
-    return res.data[0];
+    return res.data;
   },
 );
 
@@ -88,7 +88,7 @@ export const projectSlice = createSlice({
     },
     [getProjectListAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
-      state.projects = [];
+      // state.projects = [];
       if (action.payload) {
         state.error = action.payload;
       } else {

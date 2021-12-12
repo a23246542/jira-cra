@@ -5,7 +5,7 @@ import { ITask } from 'types/task';
 
 type GetTasksResponse = Array<ITask>;
 
-type GetTaskResponse = Array<ITask>;
+type GetTaskResponse = ITask;
 
 type createTaskResponse = ITask;
 
@@ -23,6 +23,9 @@ export const taskApi = {
     params?: Partial<ITask>,
   ): Promise<AxiosResponse<GetTaskResponse>> => {
     return authIntance.get(`/tasks?${qs.stringify(params)}`);
+  },
+  getTask: (id: number): Promise<AxiosResponse<GetTaskResponse>> => {
+    return authIntance.get(`tasks/${id}`);
   },
   createTask: (
     params: CreateTaskInput,

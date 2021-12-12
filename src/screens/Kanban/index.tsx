@@ -16,6 +16,7 @@ import { KanbanColumsn } from './components/KanbanColumsn';
 import { useKanbanSearchParams } from './hooks/useKanbanSearchParams';
 import { SearchPanel } from './components/SearchPanel';
 import { CreateKanban } from './components/CreateKanban';
+import { TaskModal } from './components/TaskModal';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -33,16 +34,19 @@ export const KanbanScreen = () => {
   }, [kanbanParams, dispatch]);
 
   return (
-    <ContentContainer>
-      <h1>{currentProject?.name}</h1>
-      <SearchPanel />
-      <ColumnsContainer>
-        {kanbans?.map((kanban) => (
-          <KanbanColumsn key={kanban.id} kanban={kanban} />
-        ))}
-        <CreateKanban />
-      </ColumnsContainer>
-    </ContentContainer>
+    <>
+      <ContentContainer>
+        <h1>{currentProject?.name}</h1>
+        <SearchPanel />
+        <ColumnsContainer>
+          {kanbans?.map((kanban) => (
+            <KanbanColumsn key={kanban.id} kanban={kanban} />
+          ))}
+          <CreateKanban />
+        </ColumnsContainer>
+      </ContentContainer>
+      <TaskModal />
+    </>
   );
 };
 

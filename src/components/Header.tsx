@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Button, Typography } from 'antd';
+import { useNavigate } from 'react-router';
 import { useAuth } from 'hooks/useAuth';
 import { Row } from './UI';
 
@@ -8,10 +9,16 @@ import colors from 'theme/colors';
 
 export const AuthHeader = () => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
   return (
     <HeaderContentContainer between>
       <HeaderLeft gap>
-        <SofewareLogo width="18rem" color={colors.primary} />
+        <SofewareLogo
+          onClick={() => navigate('/')}
+          width="18rem"
+          color={colors.primary}
+          style={{ cursor: 'pointer' }}
+        />
         <Typography.Text>專案</Typography.Text>
         <Typography.Text>組員</Typography.Text>
       </HeaderLeft>

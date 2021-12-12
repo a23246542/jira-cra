@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   useSearchParams,
   URLSearchParamsInit,
@@ -21,8 +21,7 @@ export const useUrlQueryParams = <K extends string>(
     return obj;
   }, [keysState, searchParams]);
 
-  return [
-    paramsObj,
+  const setParams = useCallback(
     (updateParams: Partial<{ [key in K]: unknown }>) => {
       setSearchParams(
         cleanObject({
@@ -31,5 +30,8 @@ export const useUrlQueryParams = <K extends string>(
         }) as URLSearchParamsInit,
       );
     },
-  ] as const;
+    [],
+  );
+
+  return [paramsObj, setParams] as const;
 };

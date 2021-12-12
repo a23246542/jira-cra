@@ -54,7 +54,7 @@ export const kanbanSlice = createSlice({
     },
     [getKanbansAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
-      state.kanbans = [];
+      // state.kanbans = [];
       if (action.payload) {
         state.error = action.payload;
       } else {
