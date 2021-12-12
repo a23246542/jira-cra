@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Card } from 'antd';
 import {
   getTasksAsync,
   selectTasksByKanbanId,
@@ -10,9 +9,8 @@ import { useAppDispatch } from 'redux/store';
 import { IKanban } from 'types/kanban';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
 import colors from 'theme/colors';
-import { TaskTypeIcon } from './TaskTypeIcon';
 import { CreateTask } from './CreateTask';
-import { useTaskModal } from '../hooks/useTaskModal';
+import { TaskCard } from './TaskCard';
 
 interface IKanbanColumns {
   kanban: IKanban;
@@ -20,7 +18,6 @@ interface IKanbanColumns {
 
 export const KanbanColumsn = ({ kanban }: IKanbanColumns) => {
   const [taskParams] = useTaskSearchParams();
-  const { startEditTask } = useTaskModal();
 
   const dispatch = useAppDispatch();
   const tasks = useSelector(selectTasksByKanbanId(kanban.id));
@@ -29,23 +26,12 @@ export const KanbanColumsn = ({ kanban }: IKanbanColumns) => {
     dispatch(getTasksAsync(taskParams));
   }, [taskParams, dispatch]);
 
-  const handleTaskCardClick = (id: number) => startEditTask(id);
-
   return (
     <KanbanContainer>
       <h3>{kanban.name}</h3>
       <TasksContainer>
         {tasks?.map((task) => {
-          return (
-            <Card
-              key={task.id}
-              onClick={() => startEditTask(task.id)}
-              style={{ marginBottom: '.5rem' }}
-            >
-              <div>{task.name}</div>
-              <TaskTypeIcon typeId={task.typeId} />
-            </Card>
-          );
+          return <TaskCard task={task} />;
         })}
         <CreateTask kanbanId={kanban.id} />
       </TasksContainer>
