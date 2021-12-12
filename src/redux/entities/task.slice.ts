@@ -59,6 +59,16 @@ export const getTaskAsync = createAsyncThunk(
     const res = await taskApi.getTask(id);
     return res.data;
   },
+  {
+    condition(params, { getState }) {
+      if (
+        // @ts-ignore
+        getState().task.currentTaskState === FetchState.LOADING
+      ) {
+        return false;
+      }
+    },
+  },
 );
 
 export const addTaskAsync = createAsyncThunk(
