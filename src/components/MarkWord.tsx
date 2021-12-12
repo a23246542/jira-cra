@@ -7,29 +7,17 @@ export const MarkWord = ({ name, keyword }: IMarkWord) => {
   if (!keyword) {
     return <span>{name}</span>;
   }
-  console.log('name', name);
 
-  const wordAry = name.split(keyword);
-  console.log('wordAry', wordAry, 'name', name, 'keyword', keyword);
+  const wordAry = name.split(keyword); //把keyowrd去掉分割
 
   return (
     <>
-      {wordAry.map((notKeywordStr, index) => {
-        console.log('str', notKeywordStr);
-
-        // if (notKeywordStr === '') {
-        //   return (
-        //     <span key={index} style={{ color: '#257AFD' }}>
-        //       {keyword}
-        //     </span>
-        //   );
-        // }
-
-        // return <span key={index}>{notKeywordStr}</span>;
-
+      {wordAry.map((str, index) => {
         return (
           <span key={index}>
-            {notKeywordStr}
+            {/* 非關鍵字的str */}
+            {str}
+            {/* 如果不是最後一個就補上keyword */}
             {index === wordAry.length - 1 ? null : (
               <span style={{ color: '#257AFD' }}>{keyword}</span>
             )}
