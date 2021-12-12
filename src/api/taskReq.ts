@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import { authIntance } from './instance';
 import qs from 'qs';
 import { ITask } from 'types/task';
+import { cleanObject } from 'utils/cleanObject';
 
 type GetTasksResponse = Array<ITask>;
 

@@ -20,14 +20,16 @@ export const IdSelect = ({
   const numberValue = toNumber(value);
 
   const handleSelectChange = (value: unknown) => {
+    console.log('value', value);
+
     onChange?.(toNumber(value));
   };
 
   return (
     <Select value={numberValue} onChange={handleSelectChange}>
-      <Select.Option value={0}>
-        {defaultOptionName || '請選擇'}
-      </Select.Option>
+      {defaultOptionName ? (
+        <Select.Option value={0}>{defaultOptionName}</Select.Option>
+      ) : null}
       {options?.map((option) => (
         <Select.Option key={option.id} value={option.id}>
           {option.name}

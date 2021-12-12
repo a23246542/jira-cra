@@ -4,10 +4,7 @@ import { EpicSelect } from 'components/EpicSelect';
 import { TaskTypeSelect } from 'components/TaskTypeSelect';
 import { UserSelect } from 'components/UserSelect';
 import { useEffect } from 'react';
-import {
-  addTaskAsync,
-  editTaskAsync,
-} from 'redux/entities/task.slice';
+import { editTaskAsync } from 'redux/entities/task.slice';
 import { useAppDispatch } from 'redux/store';
 import { useTaskModal } from '../hooks/useTaskModal';
 
@@ -36,8 +33,6 @@ export const TaskModal = () => {
   };
 
   const handleOk = () => {
-    console.log('form', form.getFieldsValue());
-
     dispatch(
       editTaskAsync({
         ...editingTask,
@@ -76,11 +71,7 @@ export const TaskModal = () => {
           <Form.Item label="任務組" name="epicId">
             <EpicSelect defaultOptionName="任務組" />
           </Form.Item>
-          <Form.Item
-            label="經辦人"
-            name="processorId"
-            rules={[{ required: true, message: '請選擇經辦人' }]}
-          >
+          <Form.Item label="經辦人" name="processorId">
             <UserSelect defaultOptionName="經辦人" />
           </Form.Item>
           <Form.Item
@@ -88,7 +79,7 @@ export const TaskModal = () => {
             name="typeId"
             rules={[{ required: true, message: '請選擇任務類型' }]}
           >
-            <TaskTypeSelect defaultOptionName="任務類型" />
+            <TaskTypeSelect />
           </Form.Item>
         </Form>
       )}
