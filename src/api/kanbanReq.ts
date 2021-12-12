@@ -15,12 +15,15 @@ type DeleteKanbanResponse = {
   success: boolean;
 };
 
+export type GetKanbanListInput = Partial<IKanban> &
+  Pick<IKanban, 'projectId'>;
+
 export type CreateKanbanInput = Partial<IKanban> &
   Pick<IKanban, 'projectId' | 'name'>;
 
 export const kanbanApi = {
   getKanbans: (
-    params?: Partial<IKanban>,
+    params?: GetKanbanListInput,
   ): Promise<AxiosResponse<GetKanbansResponse>> => {
     return authIntance.get(`/kanbans?${qs.stringify(params)}`);
   },
@@ -28,5 +31,10 @@ export const kanbanApi = {
     params: CreateKanbanInput,
   ): Promise<AxiosResponse<createKanbanResponse>> => {
     return authIntance.post('/kanbans', params);
+  },
+  deleteKanban: (
+    id: number,
+  ): Promise<AxiosResponse<DeleteKanbanResponse>> => {
+    return authIntance.delete(`/kanbans/${id}`);
   },
 };

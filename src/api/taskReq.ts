@@ -16,6 +16,9 @@ type DeleteTaskResponse = {
   success: boolean;
 };
 
+export type GetTaskListInput = Partial<ITask> &
+  Pick<ITask, 'projectId'>;
+
 export type CreateTaskInput = Partial<ITask> &
   Pick<ITask, 'projectId' | 'kanbanId' | 'name'>;
 
@@ -23,7 +26,7 @@ export type UpdateTaskInput = Partial<ITask> & Pick<ITask, 'id'>;
 
 export const taskApi = {
   getTasks: (
-    params?: Partial<ITask>,
+    params: GetTaskListInput,
   ): Promise<AxiosResponse<GetTasksResponse>> => {
     return authIntance.get(`/tasks?${qs.stringify(params)}`);
   },
@@ -39,5 +42,10 @@ export const taskApi = {
     params: UpdateTaskInput,
   ): Promise<AxiosResponse<updateTaskResponse>> => {
     return authIntance.patch(`/tasks/${params.id}`, params);
+  },
+  deleteTask: (
+    id: number,
+  ): Promise<AxiosResponse<DeleteTaskResponse>> => {
+    return authIntance.delete(`/tasks/${id}`);
   },
 };

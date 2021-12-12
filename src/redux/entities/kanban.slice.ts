@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { kanbanApi, CreateKanbanInput } from 'api/kanbanReq';
+import {
+  kanbanApi,
+  CreateKanbanInput,
+  GetKanbanListInput,
+} from 'api/kanbanReq';
 import { FetchState } from 'types/common';
 import { RootState, AppDispatch } from 'redux/store';
 import { IKanban } from 'types/kanban';
@@ -21,7 +25,7 @@ const initialState: KanbanSliceState = {
 
 export const getKanbansAsync = createAsyncThunk(
   'kanban/getKanbansAsync',
-  async (params: Partial<IKanban>, thunkAPI) => {
+  async (params: GetKanbanListInput, thunkAPI) => {
     const res = await kanbanApi.getKanbans(params);
     return res.data;
   },
@@ -32,6 +36,21 @@ export const addKanbanAsync = createAsyncThunk(
   async (params: CreateKanbanInput) => {
     const res = await kanbanApi.createKanban(params);
     return res.data;
+  },
+);
+
+export const deleteKanbanAsync = createAsyncThunk(
+  'kanban/deleteKanban',
+  async (id: number, thunkAPI) => {
+    const res = await kanbanApi.deleteKanban(id);
+    if (res.data.success) {
+      thunkAPI.dispatch(
+        getKanbansAsync({
+          //@ts-ignore
+          projectId: thunkAPI.getState().project.currentProject.id,
+        }),
+      );
+    }
   },
 );
 
@@ -71,6 +90,22 @@ export const kanbanSlice = createSlice({
       state.error = null;
     },
     [addKanbanAsync.rejected.type]: (state, action) => {
+      state.mutateState = FetchState.FAILED;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
+    [deleteKanbanAsync.pending.type]: (state, action) => {
+      state.mutateState = FetchState.LOADING;
+      state.error = null;
+    },
+    [deleteKanbanAsync.fulfilled.type]: (state, action) => {
+      state.mutateState = FetchState.SUCCESS;
+      state.error = null;
+    },
+    [deleteKanbanAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
       if (action.payload) {
         state.error = action.payload;

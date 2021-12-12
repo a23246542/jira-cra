@@ -1,10 +1,13 @@
-import { Form, Input, Modal, Spin } from 'antd';
+import { Button, Col, Form, Input, Modal, Spin } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { EpicSelect } from 'components/EpicSelect';
 import { TaskTypeSelect } from 'components/TaskTypeSelect';
 import { UserSelect } from 'components/UserSelect';
 import { useEffect } from 'react';
-import { editTaskAsync } from 'redux/entities/task.slice';
+import {
+  deleteTaskAsync,
+  editTaskAsync,
+} from 'redux/entities/task.slice';
 import { useAppDispatch } from 'redux/store';
 import { useTaskModal } from '../hooks/useTaskModal';
 
@@ -45,6 +48,23 @@ export const TaskModal = () => {
       });
   };
 
+  const handleDeleteBtnClick = () => {
+    if (!editingTask) return;
+
+    Modal.confirm({
+      title: `確定刪除${editingTask.name}`,
+      okText: '確定',
+      cancelText: '取消',
+      onOk() {
+        return dispatch(deleteTaskAsync(editingTask.id))
+          .unwrap()
+          .then(() => {
+            handleClose();
+          });
+      },
+    });
+  };
+
   return (
     <Modal
       visible={isOpen}
@@ -81,6 +101,11 @@ export const TaskModal = () => {
           >
             <TaskTypeSelect />
           </Form.Item>
+          <Col span="22" style={{ textAlign: 'right' }}>
+            <Button onClick={handleDeleteBtnClick} size="small">
+              刪除
+            </Button>
+          </Col>
         </Form>
       )}
     </Modal>

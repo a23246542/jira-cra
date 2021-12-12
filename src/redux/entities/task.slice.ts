@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
   CreateTaskInput,
+  GetTaskListInput,
   taskApi,
   UpdateTaskInput,
 } from 'api/taskReq';
@@ -34,10 +35,7 @@ const initialState: TaskSliceState = {
 
 export const getTasksAsync = createAsyncThunk(
   'task/getTasksAsync',
-  async (
-    params: Partial<ITask> & Pick<ITask, 'projectId'>,
-    thunkAPI,
-  ) => {
+  async (params: GetTaskListInput, thunkAPI) => {
     const res = await taskApi.getTasks(params);
     return res.data;
   },
@@ -88,6 +86,19 @@ export const editTaskAsync = createAsyncThunk(
   'task/editTaskAsync',
   async (params: UpdateTaskInput) => {
     const res = await taskApi.updateTask(params);
+    return res.data;
+  },
+);
+
+export const deleteTaskAsync = createAsyncThunk(
+  'task/deleteTaskAsync',
+  async (id: number, { dispatch, getState }) => {
+    const res = await taskApi.deleteTask(id);
+    if (res.data.success) {
+      //@ts-ignore
+      const projectId = getState().project.currentProject.id;
+      dispatch(getTasksAsync({ projectId }));
+    }
     return res.data;
   },
 );
@@ -171,6 +182,22 @@ export const taskSlice = createSlice({
       state.error = null;
     },
     [editTaskAsync.rejected.type]: (state, action) => {
+      state.mutateState = FetchState.FAILED;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
+    [deleteTaskAsync.pending.type]: (state, action) => {
+      state.mutateState = FetchState.LOADING;
+      state.error = null;
+    },
+    [deleteTaskAsync.fulfilled.type]: (state, action) => {
+      state.mutateState = FetchState.SUCCESS;
+      state.error = null;
+    },
+    [deleteTaskAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
       if (action.payload) {
         state.error = action.payload;
