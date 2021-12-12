@@ -12,7 +12,7 @@ import {
   getProjectAsync,
   selectProject,
 } from 'redux/entities/project.slice';
-import { KanbanColumsn } from './components/KanbanColumsn';
+import { KanbanColumn } from './components/KanbanColumn';
 import { useKanbanSearchParams } from './hooks/useKanbanSearchParams';
 import { SearchPanel } from './components/SearchPanel';
 import { CreateKanban } from './components/CreateKanban';
@@ -40,7 +40,7 @@ export const KanbanScreen = () => {
         <SearchPanel />
         <ColumnsContainer>
           {kanbans?.map((kanban) => (
-            <KanbanColumsn key={kanban.id} kanban={kanban} />
+            <KanbanColumn key={kanban.id} kanban={kanban} />
           ))}
           <CreateKanban />
         </ColumnsContainer>

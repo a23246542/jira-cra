@@ -7,7 +7,7 @@ import {
 } from 'redux/entities/kanban.slice';
 import { useAppDispatch } from 'redux/store';
 import { useProjectIdInUrl } from '../hooks/useProjectIdInUrl';
-import { KanbanContainer } from './KanbanColumsn';
+import { KanbanContainer } from './KanbanColumn';
 
 export const CreateKanban = () => {
   const [name, setName] = useState('');

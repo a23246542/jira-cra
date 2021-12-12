@@ -15,11 +15,11 @@ import { CreateTask } from './CreateTask';
 import { TaskCard } from './TaskCard';
 import { Row } from 'components/UI/Row';
 
-interface IKanbanColumns {
+interface IKanbanColumn {
   kanban: IKanban;
 }
 
-export const KanbanColumsn = ({ kanban }: IKanbanColumns) => {
+export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
   const [taskParams] = useTaskSearchParams();
 
   const dispatch = useAppDispatch();
