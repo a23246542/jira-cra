@@ -119,5 +119,8 @@ export const kanbanSlice = createSlice({
 export const selectKanbans = (state: RootState) =>
   state.kanban.kanbans;
 
+export const selectKanbanFetchLoading = (state: RootState) =>
+  state.kanban.state === FetchState.LOADING;
+
 export const selectMutateLoading = (state: RootState) =>
   state.kanban.mutateState === FetchState.LOADING;

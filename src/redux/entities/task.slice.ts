@@ -41,6 +41,14 @@ export const getTasksAsync = createAsyncThunk(
   },
   {
     condition(params, { getState }) {
+      //@ts-ignore
+      const taskEntity = getState().task;
+      if (
+        taskEntity.state === FetchState.LOADING ||
+        taskEntity.state === FetchState.SUCCESS
+      ) {
+        return false;
+      }
       if (
         // @ts-ignore
         params.projectId === getState().task.fetchingTasksProjectId
@@ -217,6 +225,9 @@ export const selectCurrentTask = (state: RootState) =>
 
 export const selectCurrentTaskState = (state: RootState) =>
   state.task.currentTaskState;
+
+export const selectTaskFetchLoading = (state: RootState) =>
+  state.task.state === FetchState.LOADING;
 
 export const selectTaskMutateState = (state: RootState) =>
   state.task.mutateState;
