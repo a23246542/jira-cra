@@ -1,5 +1,4 @@
 import { Drawer, Form, Input, Button, Spin } from 'antd';
-import { useDispatch } from 'react-redux';
 import styled from '@emotion/styled';
 import { UserSelect } from 'components/UserSelect';
 import { useProjectModal } from '../hooks/useProjectModal';
@@ -9,9 +8,9 @@ import {
   editProjectAsync,
 } from 'redux/entities/project.slice';
 import { useAppDispatch } from 'redux/store';
-import { addProjectRequestParams } from 'api/projectReq';
+import { createProjectInput } from 'api/projectReq';
 
-type FormValue = addProjectRequestParams;
+type FormValue = createProjectInput;
 
 export const ProjectModal = () => {
   const {

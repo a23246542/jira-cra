@@ -4,7 +4,10 @@ import { projectApi } from 'api/projectReq';
 
 import { IProject, FetchState } from 'types';
 import { RootState } from 'redux/store';
-import { addProjectRequestParams } from 'api/projectReq';
+import {
+  createProjectInput,
+  updateProjectInput,
+} from 'api/projectReq';
 
 interface ProjectSliceState {
   projects: Array<IProject>;
@@ -43,7 +46,7 @@ export const getProjectAsync = createAsyncThunk(
 
 export const editProjectAsync = createAsyncThunk(
   'project/editProjectAsync',
-  async (params: Partial<IProject> & { id: number }) => {
+  async (params: updateProjectInput) => {
     const res = await projectApi.updateProject(params);
     return res.data;
   },
@@ -51,8 +54,8 @@ export const editProjectAsync = createAsyncThunk(
 
 export const addProjectAsync = createAsyncThunk(
   'project/addProjectAsync',
-  async (params: addProjectRequestParams, thunkAPI) => {
-    const res = await projectApi.addProject(params);
+  async (params: createProjectInput, thunkAPI) => {
+    const res = await projectApi.createProject(params);
     thunkAPI.dispatch(getProjectListAsync());
   },
 );

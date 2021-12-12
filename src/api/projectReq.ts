@@ -7,7 +7,7 @@ type GetProjectsResponse = Array<IProject>;
 
 type GetProjectResponse = IProject;
 
-type addProjectResponse = IProject;
+type createProjectResponse = IProject;
 
 type updateProjectResponse = IProject;
 
@@ -15,10 +15,12 @@ type DeleteProjectResponse = {
   success: boolean;
 };
 
-export type addProjectRequestParams = Pick<
+export type createProjectInput = Pick<
   IProject,
   'name' | 'organization' | 'personId'
 >;
+
+export type updateProjectInput = Partial<IProject> & { id: number };
 
 export const projectApi = {
   getProjects: (
@@ -31,15 +33,15 @@ export const projectApi = {
   ): Promise<AxiosResponse<GetProjectResponse>> => {
     return authIntance.get(`/projects/${id}`);
   },
-  updateProject: (
-    params: Partial<IProject> & { id: number },
-  ): Promise<AxiosResponse<addProjectResponse>> => {
-    return authIntance.patch(`/projects/${params.id}`, params);
-  },
-  addProject: (
-    params: addProjectRequestParams,
-  ): Promise<AxiosResponse<updateProjectResponse>> => {
+  createProject: (
+    params: createProjectInput,
+  ): Promise<AxiosResponse<createProjectResponse>> => {
     return authIntance.post(`/projects`, params);
+  },
+  updateProject: (
+    params: updateProjectInput,
+  ): Promise<AxiosResponse<updateProjectResponse>> => {
+    return authIntance.patch(`/projects/${params.id}`, params);
   },
   deleteProject: (
     id: number,
