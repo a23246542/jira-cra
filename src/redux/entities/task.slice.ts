@@ -1,9 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { CreateTaskInput, taskApi } from 'api/taskReq';
+import {
+  CreateTaskInput,
+  taskApi,
+  UpdateTaskInput,
+} from 'api/taskReq';
 import { FetchState } from 'types/common';
 import { RootState, AppDispatch } from 'redux/store';
 import { ITask } from 'types/task';
+import { stat } from 'fs';
 
 interface TaskSliceState {
   tasks: Array<ITask>;
@@ -54,7 +59,7 @@ export const getTasksAsync = createAsyncThunk(
 );
 
 export const getTaskAsync = createAsyncThunk(
-  'project/getTaskAsync',
+  'task/getTaskAsync',
   async (id: number) => {
     const res = await taskApi.getTask(id);
     return res.data;
@@ -72,9 +77,17 @@ export const getTaskAsync = createAsyncThunk(
 );
 
 export const addTaskAsync = createAsyncThunk(
-  'kanban/addKanbanAsync',
+  'task/addTaskAsync',
   async (params: CreateTaskInput) => {
     const res = await taskApi.createTask(params);
+    return res.data;
+  },
+);
+
+export const editTaskAsync = createAsyncThunk(
+  'task/editTaskAsync',
+  async (params: UpdateTaskInput) => {
+    const res = await taskApi.updateTask(params);
     return res.data;
   },
 );
@@ -144,6 +157,27 @@ export const taskSlice = createSlice({
         state.error = action.error;
       }
     },
+    [editTaskAsync.pending.type]: (state, action) => {
+      state.mutateState = FetchState.LOADING;
+      state.error = null;
+    },
+    [editTaskAsync.fulfilled.type]: (state, action) => {
+      state.mutateState = FetchState.SUCCESS;
+      state.tasks.forEach((task, index) => {
+        if (task.id === action.payload.id) {
+          state.tasks[index] = action.payload;
+        }
+      });
+      state.error = null;
+    },
+    [editTaskAsync.rejected.type]: (state, action) => {
+      state.mutateState = FetchState.FAILED;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
   },
 });
 
@@ -156,6 +190,9 @@ export const selectCurrentTask = (state: RootState) =>
 
 export const selectCurrentTaskState = (state: RootState) =>
   state.task.currentTaskState;
+
+export const selectTaskMutateState = (state: RootState) =>
+  state.task.mutateState;
 
 export const selectTasksByKanbanId =
   (id: number) => (state: RootState) => {

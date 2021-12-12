@@ -6,6 +6,7 @@ import {
   getTaskAsync,
   selectCurrentTask,
   selectCurrentTaskState,
+  selectTaskMutateState,
 } from 'redux/entities/task.slice';
 import { FetchState } from 'types';
 
@@ -15,6 +16,7 @@ export const useTaskModal = () => {
   ]);
   const editingTask = useSelector(selectCurrentTask);
   const currentTaskState = useSelector(selectCurrentTaskState);
+  const mutateState = useSelector(selectTaskMutateState);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -39,6 +41,7 @@ export const useTaskModal = () => {
   return {
     isOpen: !!editingTaskId,
     isLoading: currentTaskState === FetchState.LOADING,
+    mutateLoading: mutateState === FetchState.LOADING,
     editingTaskId,
     editingTask,
     startEditTask,

@@ -4,7 +4,10 @@ import { EpicSelect } from 'components/EpicSelect';
 import { TaskTypeSelect } from 'components/TaskTypeSelect';
 import { UserSelect } from 'components/UserSelect';
 import { useEffect } from 'react';
-import { addTaskAsync } from 'redux/entities/task.slice';
+import {
+  addTaskAsync,
+  editTaskAsync,
+} from 'redux/entities/task.slice';
 import { useAppDispatch } from 'redux/store';
 import { useTaskModal } from '../hooks/useTaskModal';
 
@@ -18,7 +21,8 @@ const formLayout = {
 };
 
 export const TaskModal = () => {
-  const { isOpen, editingTask, close, isLoading } = useTaskModal();
+  const { isOpen, editingTask, close, isLoading, mutateLoading } =
+    useTaskModal();
   const [form] = useForm();
   const dispatch = useAppDispatch();
 
@@ -34,10 +38,16 @@ export const TaskModal = () => {
   const handleOk = () => {
     console.log('form', form.getFieldsValue());
 
-    // dispatch(addTaskAsync({
-    //   ...editingTask,
-    //   ...form.getFieldsValue()
-    // }))
+    dispatch(
+      editTaskAsync({
+        ...editingTask,
+        ...form.getFieldsValue(),
+      }),
+    )
+      .unwrap()
+      .then(() => {
+        handleClose();
+      });
   };
 
   return (
@@ -48,6 +58,7 @@ export const TaskModal = () => {
       cancelText="取消"
       onCancel={handleClose}
       onOk={handleOk}
+      confirmLoading={mutateLoading}
     >
       {isLoading ? (
         <div style={{ textAlign: 'center' }}>

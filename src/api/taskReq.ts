@@ -5,7 +5,7 @@ import { ITask } from 'types/task';
 
 type GetTasksResponse = Array<ITask>;
 
-type GetTaskResponse = ITask;
+type GetTaskResponse = Partial<ITask>;
 
 type createTaskResponse = ITask;
 
@@ -18,10 +18,12 @@ type DeleteTaskResponse = {
 export type CreateTaskInput = Partial<ITask> &
   Pick<ITask, 'projectId' | 'kanbanId' | 'name'>;
 
+export type UpdateTaskInput = Partial<ITask> & Pick<ITask, 'id'>;
+
 export const taskApi = {
   getTasks: (
     params?: Partial<ITask>,
-  ): Promise<AxiosResponse<GetTaskResponse>> => {
+  ): Promise<AxiosResponse<GetTasksResponse>> => {
     return authIntance.get(`/tasks?${qs.stringify(params)}`);
   },
   getTask: (id: number): Promise<AxiosResponse<GetTaskResponse>> => {
@@ -31,5 +33,10 @@ export const taskApi = {
     params: CreateTaskInput,
   ): Promise<AxiosResponse<createTaskResponse>> => {
     return authIntance.post('/tasks', params);
+  },
+  updateTask: (
+    params: UpdateTaskInput,
+  ): Promise<AxiosResponse<updateTaskResponse>> => {
+    return authIntance.patch(`/tasks/${params.id}`, params);
   },
 };
