@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
-import { authIntance } from './instance';
+import axios, { AxiosResponse } from 'axios';
+import { authGetIntance, authIntance } from './instance';
 import qs from 'qs';
 import { IProject } from 'types/project';
 
@@ -25,13 +25,13 @@ export type updateProjectInput = Partial<IProject> & { id: number };
 export const projectApi = {
   getProjects: (
     params?: Partial<IProject>,
-  ): Promise<AxiosResponse<GetProjectsResponse>> => {
-    return authIntance.get(`/projects?${qs.stringify(params)}`);
+  ): Promise<AxiosResponse<GetProjectResponse>> => {
+    return authGetIntance.get(`/projects?${qs.stringify(params)}`);
   },
   getProject: (
     id: number,
   ): Promise<AxiosResponse<GetProjectResponse>> => {
-    return authIntance.get(`/projects/${id}`);
+    return authGetIntance.get(`/projects/${id}`);
   },
   createProject: (
     params: createProjectInput,

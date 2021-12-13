@@ -1,9 +1,9 @@
 import qs from 'qs';
-import { authIntance } from './instance';
+import { authGetIntance } from './instance';
 import { IUser } from 'types';
 
 export const userApi = {
   getUserData: (params?: Partial<IUser>) => {
-    return authIntance.get(`/users?${qs.stringify(params)}`);
+    return authGetIntance.get(`/users?${qs.stringify(params)}`);
   },
 };

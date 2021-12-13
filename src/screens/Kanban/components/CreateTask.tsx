@@ -34,7 +34,7 @@ export const CreateTask = ({ kanbanId }: ICreateTask) => {
   if (!inputMode) {
     return (
       <StyleAddTask onClick={handleToggleInput}>
-        +創建任務
+        +新增任務
       </StyleAddTask>
     );
   }

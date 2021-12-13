@@ -50,8 +50,6 @@ export const userSlice = createSlice({
     },
     [getUserAsync.fulfilled.type]: (state, action) => {
       state.state = FetchState.SUCCESS;
-      console.log('getUserAsync payload', action);
-
       if (!Array.isArray(action.payload)) {
         console.error('user payload 錯誤');
       }

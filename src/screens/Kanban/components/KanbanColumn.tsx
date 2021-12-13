@@ -31,7 +31,7 @@ export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
 
   return (
     <KanbanContainer>
-      <Row between>
+      <Row between marginBottom={0.5}>
         <h3>{kanban.name}</h3>
         <More kanban={kanban} />
       </Row>
