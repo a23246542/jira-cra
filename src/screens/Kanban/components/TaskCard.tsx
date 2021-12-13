@@ -19,17 +19,18 @@ export const TaskCard = ({ task }: ITaskCard) => {
   };
 
   return (
-    <Card
-      key={task.id}
-      onClick={handleTaskCardClick}
-      style={{ marginBottom: '.5rem' }}
-    >
+    <StyleCard key={task.id} onClick={handleTaskCardClick}>
       <div>
         <Typography.Text ellipsis>
           <MarkWord name={task.name} keyword={keyword} />
         </Typography.Text>
       </div>
       <TaskTypeIcon typeId={task.typeId} />
-    </Card>
+    </StyleCard>
   );
 };
+
+const StyleCard = styled(Card)`
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+`;
