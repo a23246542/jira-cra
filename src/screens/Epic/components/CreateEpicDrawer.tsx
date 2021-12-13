@@ -1,12 +1,13 @@
 import { Button, Drawer, DrawerProps, Form, Input } from 'antd';
 import { useSelector } from 'react-redux';
 import { DrawerContentContainer } from 'components/UI';
-import { selectMutateLoading } from 'redux/entities/kanban.slice';
 import { IEpic } from 'types/epic';
 import { useAppDispatch } from 'redux/store';
-import { addEpicAsync } from 'redux/entities/epic.slice';
+import {
+  addEpicAsync,
+  selectEpicMutateLoading,
+} from 'redux/entities/epic.slice';
 import { useProjectIdInUrl } from 'hooks/useProjectIdInUrl';
-import { idText } from 'typescript';
 import { useEffect } from 'react';
 
 type FormValue = Pick<IEpic, 'name'>;
@@ -15,7 +16,7 @@ export const CreateEpicDrawer = ({
   visible,
   onClose,
 }: Pick<DrawerProps, 'visible'> & { onClose: () => void }) => {
-  const isMutateLoading = useSelector(selectMutateLoading);
+  const isMutateLoading = useSelector(selectEpicMutateLoading);
   const dispatch = useAppDispatch();
   const projectId = useProjectIdInUrl();
 

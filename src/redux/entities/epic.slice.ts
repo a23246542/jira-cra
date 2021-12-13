@@ -120,5 +120,5 @@ export const actions = epicSlice.actions;
 
 export const selectEpicList = (state: RootState) => state.epic.epics;
 
-export const selectMutateLoading = (state: RootState) =>
+export const selectEpicMutateLoading = (state: RootState) =>
   state.epic.mutateState === FetchState.LOADING;

@@ -76,7 +76,10 @@ export const EpicScreen = () => {
             {taskList
               ?.filter((task) => task.epicId === epic.id)
               .map((task, index) => (
-                <li style={{ marginBottom: '.7rem' }}>
+                <li
+                  key={`${index}_${task.epicId}`}
+                  style={{ marginBottom: '.7rem' }}
+                >
                   <Link
                     to={`/project/${projectId}/kanban?editingTaskId=${task.id}`}
                   >
