@@ -15,6 +15,12 @@ import colors from 'theme/colors';
 import { CreateTask } from './CreateTask';
 import { TaskCard } from './TaskCard';
 import { Row } from 'components/UI/Row';
+import {
+  Drop,
+  DropChild,
+  Drag,
+  DragChild,
+} from 'components/DragDrop';
 
 interface IKanbanColumn {
   kanban: IKanban;
@@ -46,9 +52,27 @@ export const KanbanColumn =
           <More kanban={kanban} />
         </Row>
         <TasksContainer>
-          {tasks?.map((task) => {
-            return <TaskCard key={task.id} task={task} />;
-          })}
+          <Drop
+            type="row"
+            droppableId={`taskContainer_${kanban.id}`}
+            direction="vertical"
+          >
+            <DropChild>
+              {tasks?.map((task, index) => {
+                return (
+                  <Drag
+                    key={task.id}
+                    draggableId={`task_${task.id}`}
+                    index={index}
+                  >
+                    <DragChild>
+                      <TaskCard task={task} />
+                    </DragChild>
+                  </Drag>
+                );
+              })}
+            </DropChild>
+          </Drop>
           <CreateTask kanbanId={kanban.id} />
         </TasksContainer>
       </KanbanContainer>

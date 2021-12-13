@@ -57,7 +57,11 @@ export const KanbanScreen = () => {
             <Spin size="large" />
           ) : (
             <ColumnsContainer>
-              <Drop droppableId="kanban" direction="horizontal">
+              <Drop
+                type="column"
+                droppableId="kanbanContainer"
+                direction="horizontal"
+              >
                 <DropChild style={{ display: 'flex' }}>
                   {kanbans?.map((kanban, index) => (
                     <Drag
