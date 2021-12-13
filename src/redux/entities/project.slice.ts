@@ -176,3 +176,6 @@ export const projectSlice = createSlice({
 });
 
 export const selectProject = (state: RootState) => state.project;
+
+export const selectCurrentProject = (state: RootState) =>
+  state.project.currentProject;

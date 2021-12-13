@@ -3,7 +3,7 @@ import { Card, Input } from 'antd';
 import styled from '@emotion/styled';
 import { useAppDispatch } from 'redux/store';
 import { addTaskAsync } from 'redux/entities/task.slice';
-import { useProjectIdInUrl } from '../hooks/useProjectIdInUrl';
+import { useProjectIdInUrl } from '../../../hooks/useProjectIdInUrl';
 
 interface ICreateTask {
   kanbanId: number;

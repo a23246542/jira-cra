@@ -6,7 +6,7 @@ import {
   selectMutateLoading,
 } from 'redux/entities/kanban.slice';
 import { useAppDispatch } from 'redux/store';
-import { useProjectIdInUrl } from '../hooks/useProjectIdInUrl';
+import { useProjectIdInUrl } from '../../../hooks/useProjectIdInUrl';
 import { KanbanContainer } from './KanbanColumn';
 
 export const CreateKanban = () => {
