@@ -1,4 +1,4 @@
-import { Button, List, Typography } from 'antd';
+import { Button, List, Spin, Typography } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
@@ -10,8 +10,10 @@ import {
 import { useAppDispatch } from 'redux/store';
 import { useProjectIdInUrl } from 'hooks/useProjectIdInUrl';
 import {
+  deleteEpicAsync,
   getEpicListAsync,
   selectEpicList,
+  selectEpicMutateLoading,
 } from 'redux/entities/epic.slice';
 import { IEpic } from 'types/epic';
 import {
@@ -25,6 +27,7 @@ export const EpicScreen = () => {
   const currentProject = useSelector(selectCurrentProject);
   const taskList = useSelector(selectTasks);
   const epicList = useSelector(selectEpicList);
+  const isMutateLoading = useSelector(selectEpicMutateLoading);
   const dispatch = useAppDispatch();
   const projectId = useProjectIdInUrl();
   const [isCreateEpicOpen, setIsCreateEpicOpen] = useState(false);
@@ -45,6 +48,10 @@ export const EpicScreen = () => {
     setIsCreateEpicOpen(true);
   };
 
+  const handleDeleteBtnClick = (epicId: number) => {
+    dispatch(deleteEpicAsync(epicId));
+  };
+
   const renderItem = useCallback(
     (epic: IEpic) => (
       <List.Item>
@@ -54,7 +61,13 @@ export const EpicScreen = () => {
               <Typography.Title level={5}>
                 {epic?.name}
               </Typography.Title>
-              <Button type="link">刪除</Button>
+              <Button
+                onClick={() => handleDeleteBtnClick(epic.id)}
+                disabled={isMutateLoading}
+                type="link"
+              >
+                刪除
+              </Button>
             </Row>
           }
           description={
