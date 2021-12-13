@@ -6,8 +6,6 @@ import {
   DroppableProps,
   DroppableProvided,
   DroppableProvidedProps,
-  DraggableProvidedDraggableProps,
-  DraggableProvidedDragHandleProps,
 } from 'react-beautiful-dnd';
 
 type DropProps = Omit<DroppableProps, 'children'> & {
@@ -40,7 +38,7 @@ export const DropChild = React.forwardRef<
   HTMLDivElement,
   DropChildProps
 >(({ children, ...props }, ref) => {
-  console.log('drap child props', props);
+  // console.log('drap child props', props);
 
   return (
     <div {...props} ref={ref}>
@@ -50,11 +48,11 @@ export const DropChild = React.forwardRef<
   );
 });
 
-export type DrapProps = Omit<DraggableProps, 'children'> & {
+export type DragProps = Omit<DraggableProps, 'children'> & {
   children: React.ReactNode;
 };
 
-export const Drag = ({ children, ...props }: DrapProps) => {
+export const Drag = ({ children, ...props }: DragProps) => {
   return (
     <Draggable {...props}>
       {(provided) => {
@@ -71,30 +69,11 @@ export const Drag = ({ children, ...props }: DrapProps) => {
   );
 };
 
-type DragChildProps = Omit<
-  DraggableProvidedDraggableProps,
-  'data-rbd-draggable-context-id' | 'data-rbd-draggable-id'
-> &
-  // & {
-  //   children: React.ReactNode;
-  // }
-  // DraggableProvidedDraggableProps&
-  Omit<
-    DraggableProvidedDragHandleProps,
-    | 'draggable'
-    | 'tabIndex'
-    | 'role'
-    | 'aria-describedby'
-    | 'onDragStart'
-    | 'data-rbd-drag-handle-draggable-id'
-    | 'data-rbd-drag-handle-context-id'
-  > &
-  React.HTMLAttributes<HTMLDivElement>;
-
 export const DragChild = React.forwardRef<
   HTMLDivElement,
-  DragChildProps
+  React.HTMLAttributes<HTMLDivElement>
 >(({ children, ...props }, ref) => {
+  // console.log('DragChild props', props);
   return (
     <div {...props} ref={ref}>
       {children}

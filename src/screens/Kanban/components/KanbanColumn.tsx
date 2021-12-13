@@ -26,58 +26,52 @@ interface IKanbanColumn {
   kanban: IKanban;
 }
 
-export const KanbanColumn =
-  // React.forwardRef<
-  //   HTMLDivElement,
-  //   IKanbanColumn
-  // >
-  ({ kanban }: IKanbanColumn) => {
-    const [taskParams] = useTaskSearchParams();
+export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
+  const [taskParams] = useTaskSearchParams();
 
-    const dispatch = useAppDispatch();
-    const tasks = useSelector(selectTasksByKanbanId(kanban.id));
+  const dispatch = useAppDispatch();
+  const tasks = useSelector(selectTasksByKanbanId(kanban.id));
 
-    useEffect(() => {
-      dispatch(getTasksAsync(taskParams));
-    }, [taskParams, dispatch]);
+  useEffect(() => {
+    dispatch(getTasksAsync(taskParams));
+  }, [taskParams, dispatch]);
 
-    return (
-      // <KanbanContainer ref={ref} {...props}>
-      <KanbanContainer>
-        <Row between marginBottom={0.5}>
-          <KanbanTitle>
-            <h3>{kanban.name}</h3>
-            <StyleBadge count={tasks.length} offset={[6, 2]} />
-          </KanbanTitle>
-          <More kanban={kanban} />
-        </Row>
-        <TasksContainer>
-          <Drop
-            type="row"
-            droppableId={`taskContainer_${kanban.id}`}
-            direction="vertical"
-          >
-            <DropChild>
-              {tasks?.map((task, index) => {
-                return (
-                  <Drag
-                    key={task.id}
-                    draggableId={`task_${task.id}`}
-                    index={index}
-                  >
-                    <DragChild>
-                      <TaskCard task={task} />
-                    </DragChild>
-                  </Drag>
-                );
-              })}
-            </DropChild>
-          </Drop>
-          <CreateTask kanbanId={kanban.id} />
-        </TasksContainer>
-      </KanbanContainer>
-    );
-  };
+  return (
+    <KanbanContainer>
+      <Row between marginBottom={0.5}>
+        <KanbanTitle>
+          <h3>{kanban.name}</h3>
+          <StyleBadge count={tasks.length} offset={[6, 2]} />
+        </KanbanTitle>
+        <More kanban={kanban} />
+      </Row>
+      <TasksContainer>
+        <Drop
+          type="row"
+          droppableId={`taskContainer_${kanban.id}`}
+          direction="vertical"
+        >
+          <DropChild>
+            {tasks?.map((task, index) => {
+              return (
+                <Drag
+                  key={task.id}
+                  draggableId={`task_${task.id}`}
+                  index={index}
+                >
+                  <DragChild>
+                    <TaskCard task={task} />
+                  </DragChild>
+                </Drag>
+              );
+            })}
+          </DropChild>
+        </Drop>
+        <CreateTask kanbanId={kanban.id} />
+      </TasksContainer>
+    </KanbanContainer>
+  );
+};
 
 const More = ({ kanban }: { kanban: IKanban }) => {
   const dispatch = useAppDispatch();
