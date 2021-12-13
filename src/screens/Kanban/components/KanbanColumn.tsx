@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { Badge, Button, Dropdown, Menu, Modal } from 'antd';
@@ -19,34 +20,40 @@ interface IKanbanColumn {
   kanban: IKanban;
 }
 
-export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
-  const [taskParams] = useTaskSearchParams();
+export const KanbanColumn =
+  // React.forwardRef<
+  //   HTMLDivElement,
+  //   IKanbanColumn
+  // >
+  ({ kanban }: IKanbanColumn) => {
+    const [taskParams] = useTaskSearchParams();
 
-  const dispatch = useAppDispatch();
-  const tasks = useSelector(selectTasksByKanbanId(kanban.id));
+    const dispatch = useAppDispatch();
+    const tasks = useSelector(selectTasksByKanbanId(kanban.id));
 
-  useEffect(() => {
-    dispatch(getTasksAsync(taskParams));
-  }, [taskParams, dispatch]);
+    useEffect(() => {
+      dispatch(getTasksAsync(taskParams));
+    }, [taskParams, dispatch]);
 
-  return (
-    <KanbanContainer>
-      <Row between marginBottom={0.5}>
-        <KanbanTitle>
-          <h3>{kanban.name}</h3>
-          <StyleBadge count={tasks.length} offset={[6, 2]} />
-        </KanbanTitle>
-        <More kanban={kanban} />
-      </Row>
-      <TasksContainer>
-        {tasks?.map((task) => {
-          return <TaskCard key={task.id} task={task} />;
-        })}
-        <CreateTask kanbanId={kanban.id} />
-      </TasksContainer>
-    </KanbanContainer>
-  );
-};
+    return (
+      // <KanbanContainer ref={ref} {...props}>
+      <KanbanContainer>
+        <Row between marginBottom={0.5}>
+          <KanbanTitle>
+            <h3>{kanban.name}</h3>
+            <StyleBadge count={tasks.length} offset={[6, 2]} />
+          </KanbanTitle>
+          <More kanban={kanban} />
+        </Row>
+        <TasksContainer>
+          {tasks?.map((task) => {
+            return <TaskCard key={task.id} task={task} />;
+          })}
+          <CreateTask kanbanId={kanban.id} />
+        </TasksContainer>
+      </KanbanContainer>
+    );
+  };
 
 const More = ({ kanban }: { kanban: IKanban }) => {
   const dispatch = useAppDispatch();

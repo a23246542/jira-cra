@@ -6,26 +6,9 @@ import {
   DroppableProps,
   DroppableProvided,
   DroppableProvidedProps,
+  DraggableProvidedDraggableProps,
+  DraggableProvidedDragHandleProps,
 } from 'react-beautiful-dnd';
-
-export type DrapProps = Omit<DraggableProps, 'children'> & {
-  children: React.ReactNode;
-};
-
-export const Drag = ({ children, ...props }: DrapProps) => {
-  <Draggable {...props}>
-    {(provided) => {
-      if (React.isValidElement(children)) {
-        return React.cloneElement(children, {
-          ...provided.draggableProps,
-          ...provided.dragHandleProps,
-          ref: provided.innerRef,
-        });
-      }
-      return <div />;
-    }}
-  </Draggable>;
-};
 
 type DropProps = Omit<DroppableProps, 'children'> & {
   children: React.ReactNode;
@@ -63,6 +46,58 @@ export const DropChild = React.forwardRef<
     <div {...props} ref={ref}>
       {children}
       {props.provided?.placeholder}
+    </div>
+  );
+});
+
+export type DrapProps = Omit<DraggableProps, 'children'> & {
+  children: React.ReactNode;
+};
+
+export const Drag = ({ children, ...props }: DrapProps) => {
+  return (
+    <Draggable {...props}>
+      {(provided) => {
+        if (React.isValidElement(children)) {
+          return React.cloneElement(children, {
+            ...provided.draggableProps,
+            ...provided.dragHandleProps,
+            ref: provided.innerRef,
+          });
+        }
+        return <div />;
+      }}
+    </Draggable>
+  );
+};
+
+type DragChildProps = Omit<
+  DraggableProvidedDraggableProps,
+  'data-rbd-draggable-context-id' | 'data-rbd-draggable-id'
+> &
+  // & {
+  //   children: React.ReactNode;
+  // }
+  // DraggableProvidedDraggableProps&
+  Omit<
+    DraggableProvidedDragHandleProps,
+    | 'draggable'
+    | 'tabIndex'
+    | 'role'
+    | 'aria-describedby'
+    | 'onDragStart'
+    | 'data-rbd-drag-handle-draggable-id'
+    | 'data-rbd-drag-handle-context-id'
+  > &
+  React.HTMLAttributes<HTMLDivElement>;
+
+export const DragChild = React.forwardRef<
+  HTMLDivElement,
+  DragChildProps
+>(({ children, ...props }, ref) => {
+  return (
+    <div {...props} ref={ref}>
+      {children}
     </div>
   );
 });

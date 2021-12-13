@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { DragDropContext } from 'react-beautiful-dnd';
 import {
   getKanbansAsync,
   selectKanbanFetchLoading,
@@ -21,6 +22,12 @@ import { TaskModal } from './components/TaskModal';
 import { FetchState } from 'types';
 import { Spin } from 'antd';
 import { selectTaskFetchLoading } from 'redux/entities/task.slice';
+import {
+  Drag,
+  Drop,
+  DropChild,
+  DragChild,
+} from 'components/DragDrop';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -42,20 +49,34 @@ export const KanbanScreen = () => {
 
   return (
     <>
-      <ContentContainer>
-        <h1>{currentProject?.name}</h1>
-        <SearchPanel />
-        {isLoading ? (
-          <Spin size="large" />
-        ) : (
-          <ColumnsContainer>
-            {kanbans?.map((kanban) => (
-              <KanbanColumn key={kanban.id} kanban={kanban} />
-            ))}
-            <CreateKanban />
-          </ColumnsContainer>
-        )}
-      </ContentContainer>
+      <DragDropContext onDragEnd={() => {}}>
+        <ContentContainer>
+          <h1>{currentProject?.name}</h1>
+          <SearchPanel />
+          {isLoading ? (
+            <Spin size="large" />
+          ) : (
+            <ColumnsContainer>
+              <Drop droppableId="kanban" direction="horizontal">
+                <DropChild style={{ display: 'flex' }}>
+                  {kanbans?.map((kanban, index) => (
+                    <Drag
+                      key={kanban.id}
+                      draggableId={`kanban_${kanban.id}`}
+                      index={index}
+                    >
+                      <DragChild>
+                        <KanbanColumn kanban={kanban} />
+                      </DragChild>
+                    </Drag>
+                  ))}
+                </DropChild>
+              </Drop>
+              <CreateKanban />
+            </ColumnsContainer>
+          )}
+        </ContentContainer>
+      </DragDropContext>
       <TaskModal />
     </>
   );
