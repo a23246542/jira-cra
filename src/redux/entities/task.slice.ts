@@ -241,3 +241,8 @@ export const selectTasksByKanbanId =
 
     return state.task.tasks.filter((item) => item.kanbanId === id);
   };
+
+export const selectTasksByEpicId =
+  (id: number) => (state: RootState) => {
+    return state.task.tasks.filter((item) => item.epicId === id);
+  };

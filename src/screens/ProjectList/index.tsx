@@ -8,7 +8,7 @@ import {
   selectProject,
 } from 'redux/entities/project.slice';
 import { getUserAsync, selectUsers } from 'redux/entities/user.slice';
-import { ProjectModal } from './components';
+import { ProjectDrawer } from './components';
 import { Row, ButtonNoPadding } from 'components/UI';
 import { useProjectModal } from './hooks/useProjectModal';
 import { useAppDispatch } from 'redux/store';
@@ -56,7 +56,7 @@ export const ProjectListScreen = () => {
         />
         <List dataSource={projects} users={users} />
       </ContentContainer>
-      <ProjectModal />
+      <ProjectDrawer />
     </>
   );
 };

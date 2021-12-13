@@ -1,5 +1,5 @@
 import { Button, List, Typography } from 'antd';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import { ContentContainer, Row } from 'components/UI';
@@ -19,6 +19,7 @@ import {
   selectTasks,
 } from 'redux/entities/task.slice';
 import { Link } from 'react-router-dom';
+import { CreateEpicDrawer } from './components/CreateEpicDrawer';
 
 export const EpicScreen = () => {
   const currentProject = useSelector(selectCurrentProject);
@@ -26,6 +27,7 @@ export const EpicScreen = () => {
   const epicList = useSelector(selectEpicList);
   const dispatch = useAppDispatch();
   const projectId = useProjectIdInUrl();
+  const [isCreateEpicOpen, setIsCreateEpicOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getProjectAsync(projectId));
@@ -38,6 +40,10 @@ export const EpicScreen = () => {
   useEffect(() => {
     dispatch(getTasksAsync({ projectId }));
   });
+
+  const handleCreateBtnClick = () => {
+    setIsCreateEpicOpen(true);
+  };
 
   const renderItem = useCallback(
     (epic: IEpic) => (
@@ -69,7 +75,7 @@ export const EpicScreen = () => {
           <ul>
             {taskList
               ?.filter((task) => task.epicId === epic.id)
-              .map((task) => (
+              .map((task, index) => (
                 <li style={{ marginBottom: '.7rem' }}>
                   <Link
                     to={`/project/${projectId}/kanban?editingTaskId=${task.id}`}
@@ -86,17 +92,25 @@ export const EpicScreen = () => {
   );
 
   return (
-    <ContentContainer>
-      <Row between marginBottom={2}>
-        <h1>{currentProject && `${currentProject.name}任務組`}</h1>
-        <Button type="link">創建任務組</Button>
-      </Row>
-      <List
-        dataSource={epicList}
-        renderItem={renderItem}
-        itemLayout="vertical"
-        style={{ overflowY: 'scroll', flex: '1' }}
+    <>
+      <ContentContainer>
+        <Row between marginBottom={2}>
+          <h1>{currentProject && `${currentProject.name}任務組`}</h1>
+          <Button onClick={handleCreateBtnClick} type="link">
+            創建任務組
+          </Button>
+        </Row>
+        <List
+          dataSource={epicList}
+          renderItem={renderItem}
+          itemLayout="vertical"
+          style={{ overflowY: 'scroll', flex: '1' }}
+        />
+      </ContentContainer>
+      <CreateEpicDrawer
+        visible={isCreateEpicOpen}
+        onClose={() => setIsCreateEpicOpen(false)}
       />
-    </ContentContainer>
+    </>
   );
 };

@@ -9,10 +9,11 @@ import {
 } from 'redux/entities/project.slice';
 import { useAppDispatch } from 'redux/store';
 import { createProjectInput } from 'api/projectReq';
+import { DrawerContentContainer } from 'components/UI';
 
 type FormValue = createProjectInput;
 
-export const ProjectModal = () => {
+export const ProjectDrawer = () => {
   const {
     isOpen,
     close,
@@ -116,11 +117,3 @@ export const ProjectModal = () => {
     </Drawer>
   );
 };
-
-const DrawerContentContainer = styled.div`
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
