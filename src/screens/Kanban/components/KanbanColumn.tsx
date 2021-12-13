@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
-import { Button, Dropdown, Menu, Modal } from 'antd';
+import { Badge, Button, Dropdown, Menu, Modal } from 'antd';
 import { useSelector } from 'react-redux';
 import {
   getTasksAsync,
@@ -32,7 +32,10 @@ export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
   return (
     <KanbanContainer>
       <Row between marginBottom={0.5}>
-        <h3>{kanban.name}</h3>
+        <KanbanTitle>
+          <h3>{kanban.name}</h3>
+          <StyleBadge count={tasks.length} offset={[6, 2]} />
+        </KanbanTitle>
         <More kanban={kanban} />
       </Row>
       <TasksContainer>
@@ -92,5 +95,15 @@ const TasksContainer = styled.div`
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
+  }
+`;
+
+const KanbanTitle = styled.div`
+  display: flex;
+`;
+
+export const StyleBadge = styled(Badge)`
+  sup {
+    background-color: #c9c5c5;
   }
 `;
