@@ -31,24 +31,36 @@ unAuthIntance.interceptors.response.use(
 
 export const authIntance = axios.create({
   baseURL: apiUrl,
-  headers: {
-    Authorization: `Bearer ${getToken()}`,
-    'content-Type': 'application/json',
-  },
-});
-
-export const authGetIntance = axios.create({
-  baseURL: apiUrl,
-  headers: {
-    Authorization: `Bearer ${getToken()}`,
-    'content-Type': 'application/json',
-  },
 });
 
 authIntance.interceptors.request.use(
-  (request) => {
-    if (!getToken()) return;
-    return request;
+  (config) => {
+    const token = getToken();
+    config.headers = {
+      Authorization: token ? `Bearer ${token}` : '',
+      'content-Type': 'application/json',
+    };
+    return config;
+  },
+  (error) => {
+    console.error('api有誤', error);
+    return Promise.reject(error);
+  },
+);
+
+export const authGetIntance = axios.create({
+  baseURL: apiUrl,
+});
+
+authGetIntance.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    config.headers = {
+      Authorization: token ? `Bearer ${token}` : '',
+      'content-type': 'application/json',
+    };
+
+    return config;
   },
   (error) => {
     console.error('api有誤', error);
