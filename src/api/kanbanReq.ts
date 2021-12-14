@@ -2,14 +2,13 @@ import { AxiosResponse } from 'axios';
 import { authGetIntance, authIntance } from './instance';
 import qs from 'qs';
 import { IKanban } from 'types/kanban';
+import { SortProps } from 'types/sort';
 
 type GetKanbansResponse = Array<IKanban>;
 
-type GetKanbanResponse = IKanban;
-
 type createKanbanResponse = IKanban;
 
-type updateKanbanResponse = IKanban;
+type reorderKanbanResponse = Array<IKanban>;
 
 type DeleteKanbanResponse = {
   success: boolean;
@@ -20,6 +19,8 @@ export type GetKanbanListInput = Partial<IKanban> &
 
 export type CreateKanbanInput = Partial<IKanban> &
   Pick<IKanban, 'projectId' | 'name'>;
+
+export type RecordKanbanInput = SortProps;
 
 export const kanbanApi = {
   getKanbans: (
@@ -36,5 +37,10 @@ export const kanbanApi = {
     id: number,
   ): Promise<AxiosResponse<DeleteKanbanResponse>> => {
     return authIntance.delete(`/kanbans/${id}`);
+  },
+  reorderKanban: (
+    params: RecordKanbanInput,
+  ): Promise<AxiosResponse<reorderKanbanResponse>> => {
+    return authIntance.post('/kanbans/reorder', params);
   },
 };

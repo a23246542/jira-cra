@@ -28,6 +28,7 @@ import {
   DropChild,
   DragChild,
 } from 'components/DragDrop';
+import { useDragEnd } from './hooks/useDragEnd';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -37,6 +38,7 @@ export const KanbanScreen = () => {
   const { currentProject } = useSelector(selectProject);
   const { id: projectId } = useParams();
   const kanbanParams = useKanbanSearchParams();
+  const onDragEnd = useDragEnd();
   useEffect(() => {
     projectId && dispatch(getProjectAsync(Number(projectId)));
   }, [projectId, dispatch]);
@@ -49,7 +51,7 @@ export const KanbanScreen = () => {
 
   return (
     <>
-      <DragDropContext onDragEnd={() => {}}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <ContentContainer>
           <h1>{currentProject?.name}</h1>
           <SearchPanel />

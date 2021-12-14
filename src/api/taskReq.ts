@@ -3,6 +3,7 @@ import { authGetIntance, authIntance } from './instance';
 import qs from 'qs';
 import { ITask } from 'types/task';
 import { cleanObject } from 'utils/cleanObject';
+import { SortProps } from 'types/sort';
 
 type GetTasksResponse = Array<ITask>;
 
@@ -16,6 +17,8 @@ type DeleteTaskResponse = {
   success: boolean;
 };
 
+type reorderTaskResponse = Array<ITask>;
+
 export type GetTaskListInput = Partial<ITask> &
   Pick<ITask, 'projectId'>;
 
@@ -23,6 +26,8 @@ export type CreateTaskInput = Partial<ITask> &
   Pick<ITask, 'projectId' | 'kanbanId' | 'name'>;
 
 export type UpdateTaskInput = Partial<ITask> & Pick<ITask, 'id'>;
+
+export type reorderTaskInput = SortProps;
 
 export const taskApi = {
   getTasks: (
@@ -47,5 +52,10 @@ export const taskApi = {
     id: number,
   ): Promise<AxiosResponse<DeleteTaskResponse>> => {
     return authIntance.delete(`/tasks/${id}`);
+  },
+  reorderTask: (
+    params: reorderTaskInput,
+  ): Promise<AxiosResponse<reorderTaskResponse>> => {
+    return authIntance.post('/tasks/reorder', params);
   },
 };

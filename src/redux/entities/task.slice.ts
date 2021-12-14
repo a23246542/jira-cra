@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  PayloadAction,
+} from '@reduxjs/toolkit';
 
 import {
   CreateTaskInput,
@@ -10,10 +14,13 @@ import { FetchState } from 'types/common';
 import { RootState, AppDispatch } from 'redux/store';
 import { ITask } from 'types/task';
 import { stat } from 'fs';
+import { SortProps } from 'types/sort';
+import { reorder } from 'utils/reorder';
 
 interface TaskSliceState {
   tasks: Array<ITask>;
   currentTask: ITask | null;
+  preTasks: Array<ITask>;
   state: FetchState;
   mutateState: FetchState;
   currentTaskState: FetchState;
@@ -25,6 +32,7 @@ interface TaskSliceState {
 const initialState: TaskSliceState = {
   tasks: [],
   currentTask: null,
+  preTasks: [],
   state: FetchState.IDLE,
   mutateState: FetchState.IDLE,
   currentTaskState: FetchState.IDLE,
@@ -49,12 +57,12 @@ export const getTasksAsync = createAsyncThunk(
       ) {
         return false;
       }
-      if (
-        // @ts-ignore
-        params.projectId === getState().task.fetchingTasksProjectId
-      ) {
-        return false;
-      }
+      // if ( //reorder呼叫會被擋下來
+      //   // @ts-ignore
+      //   params.projectId === getState().task.fetchingTasksProjectId
+      // ) {
+      //   return false;
+      // }
     },
     getPendingMeta({ arg, requestId }, { getState, extra }) {
       return {
@@ -111,10 +119,31 @@ export const deleteTaskAsync = createAsyncThunk(
   },
 );
 
+export const reorderTaskAsync = createAsyncThunk(
+  'task/reorderTask',
+  async (params: SortProps, { dispatch, getState }) => {
+    await taskApi.reorderTask(params);
+    // dispatch(
+    //   getTasksAsync({
+    //     //@ts-ignore
+    //     projectId: getState().project.currentProject.id,
+    //   }),
+    // );
+    // return res.data;
+  },
+);
+
 export const taskSlice = createSlice({
   name: 'task',
   initialState,
-  reducers: {},
+  reducers: {
+    setTaskList: (state, action: PayloadAction<ITask[]>) => {
+      state.tasks = action.payload;
+    },
+    setPreTaskList: (state, action: PayloadAction<ITask[]>) => {
+      state.preTasks = action.payload;
+    },
+  },
   extraReducers: {
     [getTasksAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
@@ -213,10 +242,47 @@ export const taskSlice = createSlice({
         state.error = action.error;
       }
     },
+    [reorderTaskAsync.pending.type]: (state, action) => {
+      // state.mutateState = FetchState.LOADING;
+      // state.state = FetchState.IDLE;
+      state.error = null;
+    },
+    [reorderTaskAsync.fulfilled.type]: (state, action) => {
+      // state.mutateState = FetchState.SUCCESS;
+      // state.tasks = action.payload;
+      state.error = null;
+    },
+    [reorderTaskAsync.rejected.type]: (state, action) => {
+      // state.mutateState = FetchState.FAILED;
+      state.tasks = state.preTasks;
+      if (action.payload) {
+        state.error = action.payload;
+      } else {
+        state.error = action.error;
+      }
+    },
   },
 });
 
-export const actions = taskSlice.actions;
+export const { setTaskList, setPreTaskList } = taskSlice.actions;
+
+export const reorderTaskActionAsync =
+  (params: SortProps) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    const oldList = getState().task.tasks;
+    const orderedList = reorder({
+      list: oldList,
+      ...params,
+    }) as Array<ITask>;
+    const newList = orderedList.map((item) =>
+      item.id === params.fromId
+        ? { ...item, kanbanId: params.toKanbanId as number }
+        : item,
+    );
+    dispatch(setTaskList(newList));
+    dispatch(setPreTaskList(oldList));
+    dispatch(reorderTaskAsync(params));
+  };
 
 export const selectTasks = (state: RootState) => state.task.tasks;
 
