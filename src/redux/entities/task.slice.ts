@@ -14,7 +14,7 @@ import { FetchState } from 'types/common';
 import { RootState, AppDispatch } from 'redux/store';
 import { ITask } from 'types/task';
 import { stat } from 'fs';
-import { SortProps } from 'types/sort';
+import { TaskSortProps } from 'types/sort';
 import { reorder } from 'utils/reorder';
 
 interface TaskSliceState {
@@ -121,15 +121,8 @@ export const deleteTaskAsync = createAsyncThunk(
 
 export const reorderTaskAsync = createAsyncThunk(
   'task/reorderTask',
-  async (params: SortProps, { dispatch, getState }) => {
+  async (params: TaskSortProps, { dispatch, getState }) => {
     await taskApi.reorderTask(params);
-    // dispatch(
-    //   getTasksAsync({
-    //     //@ts-ignore
-    //     projectId: getState().project.currentProject.id,
-    //   }),
-    // );
-    // return res.data;
   },
 );
 
@@ -267,7 +260,7 @@ export const taskSlice = createSlice({
 export const { setTaskList, setPreTaskList } = taskSlice.actions;
 
 export const reorderTaskActionAsync =
-  (params: SortProps) =>
+  (params: TaskSortProps) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const oldList = getState().task.tasks;
     const orderedList = reorder({
@@ -276,7 +269,7 @@ export const reorderTaskActionAsync =
     }) as Array<ITask>;
     const newList = orderedList.map((item) =>
       item.id === params.fromId
-        ? { ...item, kanbanId: params.toKanbanId as number }
+        ? { ...item, kanbanId: params.toKanbanId }
         : item,
     );
     dispatch(setTaskList(newList));

@@ -12,7 +12,7 @@ import {
 import { FetchState } from 'types/common';
 import { RootState, AppDispatch } from 'redux/store';
 import { IKanban } from 'types/kanban';
-import { SortProps } from 'types/sort';
+import { KanbanSortProps } from 'types/sort';
 import { reorder } from 'utils/reorder';
 
 interface KanbanSliceState {
@@ -64,14 +64,8 @@ export const deleteKanbanAsync = createAsyncThunk(
 
 export const reorderKanbanAsync = createAsyncThunk(
   'kanban/reorderKanban',
-  async (params: SortProps, { dispatch, getState }) => {
+  async (params: KanbanSortProps, { dispatch, getState }) => {
     await kanbanApi.reorderKanban(params);
-    // dispatch(
-    //   getKanbansAsync({
-    //     //@ts-ignore
-    //     projectId: getState().project.currentProject.id,
-    //   }),
-    // );
   },
 );
 
@@ -166,7 +160,7 @@ export const { setKanbanList, setPreKanbanList } =
   kanbanSlice.actions;
 
 export const reorderKanbanActionAsync =
-  (params: SortProps) =>
+  (params: KanbanSortProps) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const oldList = getState().kanban.kanbans;
     const newList = reorder({

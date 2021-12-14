@@ -1,18 +1,16 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  reorderKanbanActionAsync,
-  reorderKanbanAsync,
-  selectKanbans,
-} from 'redux/entities/kanban.slice';
 import { useAppDispatch } from 'redux/store';
-import { SortProps } from 'types/sort';
 import { DropResult } from 'react-beautiful-dnd';
 import {
-  reorderTaskAsync,
+  reorderKanbanActionAsync,
+  selectKanbans,
+} from 'redux/entities/kanban.slice';
+import {
   reorderTaskActionAsync,
   selectTasks,
 } from 'redux/entities/task.slice';
+import { TypeId } from 'types/sort';
 
 export const useDragEnd = () => {
   const kanbanList = useSelector(selectKanbans);
@@ -36,7 +34,7 @@ export const useDragEnd = () => {
         return;
       }
 
-      if (type === 'column') {
+      if (type === TypeId.COLUMN) {
         const fromId = kanbanList?.[source.index]?.id;
         const toId = kanbanList?.[destination.index]?.id;
 
@@ -60,7 +58,7 @@ export const useDragEnd = () => {
         );
       }
 
-      if (type === 'row') {
+      if (type === TypeId.ROW) {
         const fromKanbanId = +source.droppableId.split('_')[1];
         const toKanbanId = +destination.droppableId.split('_')[1];
 
@@ -78,8 +76,8 @@ export const useDragEnd = () => {
           destination.index === toKanbanTasks.length
             ? toKanbanTasks[toKanbanTasks.length - 1]
             : toKanbanTasks[destination.index];
-        console.log(toKanbanId, toKanbanTasks);
-        console.log(fromTask, toTask);
+        // console.log(toKanbanId, toKanbanTasks);
+        // console.log(fromTask, toTask);
 
         // const toTask = allTasks.filter((task) => task.kanbanId === toKanbanId)[
         //   destination.index

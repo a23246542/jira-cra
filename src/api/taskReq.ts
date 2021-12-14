@@ -3,7 +3,7 @@ import { authGetIntance, authIntance } from './instance';
 import qs from 'qs';
 import { ITask } from 'types/task';
 import { cleanObject } from 'utils/cleanObject';
-import { SortProps } from 'types/sort';
+import { TaskSortProps } from 'types/sort';
 
 type GetTasksResponse = Array<ITask>;
 
@@ -27,7 +27,7 @@ export type CreateTaskInput = Partial<ITask> &
 
 export type UpdateTaskInput = Partial<ITask> & Pick<ITask, 'id'>;
 
-export type reorderTaskInput = SortProps;
+export type reorderTaskInput = TaskSortProps;
 
 export const taskApi = {
   getTasks: (

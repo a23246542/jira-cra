@@ -21,6 +21,7 @@ import {
   Drag,
   DragChild,
 } from 'components/DragDrop';
+import { TypeId } from 'types/sort';
 
 interface IKanbanColumn {
   kanban: IKanban;
@@ -47,7 +48,7 @@ export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
       </Row>
       <TasksContainer>
         <Drop
-          type="row"
+          type={TypeId.ROW}
           droppableId={`taskContainer_${kanban.id}`}
           direction="vertical"
         >

@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { authGetIntance, authIntance } from './instance';
 import qs from 'qs';
 import { IKanban } from 'types/kanban';
-import { SortProps } from 'types/sort';
+import { KanbanSortProps } from 'types/sort';
 
 type GetKanbansResponse = Array<IKanban>;
 
@@ -20,7 +20,7 @@ export type GetKanbanListInput = Partial<IKanban> &
 export type CreateKanbanInput = Partial<IKanban> &
   Pick<IKanban, 'projectId' | 'name'>;
 
-export type RecordKanbanInput = SortProps;
+export type RecordKanbanInput = KanbanSortProps;
 
 export const kanbanApi = {
   getKanbans: (

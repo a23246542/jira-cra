@@ -29,6 +29,7 @@ import {
   DragChild,
 } from 'components/DragDrop';
 import { useDragEnd } from './hooks/useDragEnd';
+import { TypeId } from 'types/sort';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -60,7 +61,7 @@ export const KanbanScreen = () => {
           ) : (
             <ColumnsContainer>
               <Drop
-                type="column"
+                type={TypeId.COLUMN}
                 droppableId="kanbanContainer"
                 direction="horizontal"
               >
