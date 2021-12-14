@@ -86,14 +86,7 @@ authGetIntance.interceptors.response.use(
     if (response.status === 401) {
       return Promise.reject({ message: '請重新登入' });
     }
-    const res = await axios.post(
-      'https://api.zhconvert.org/convert',
-      {
-        text: JSON.stringify(response.data),
-        converter: 'Traditional',
-      },
-    );
-    return { ...response, data: JSON.parse(res.data.data.text) };
+    return response;
   },
   (error) => {
     console.error('api失敗', error);
