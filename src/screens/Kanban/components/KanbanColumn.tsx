@@ -28,14 +28,13 @@ interface IKanbanColumn {
 }
 
 export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
-  const [taskParams] = useTaskSearchParams();
-
-  const dispatch = useAppDispatch();
+  // const [taskParams] = useTaskSearchParams();
+  // const dispatch = useAppDispatch();
   const tasks = useSelector(selectTasksByKanbanId(kanban.id));
 
-  useEffect(() => {
-    dispatch(getTasksAsync(taskParams));
-  }, [taskParams, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getTasksAsync(taskParams));
+  // }, [taskParams, dispatch]);
 
   return (
     <KanbanContainer>
@@ -52,7 +51,7 @@ export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
           droppableId={`taskContainer_${kanban.id}`}
           direction="vertical"
         >
-          <DropChild>
+          <DropChild style={{ minHeight: '1rem' }}>
             {tasks?.map((task, index) => {
               return (
                 <Drag
@@ -105,6 +104,7 @@ const More = ({ kanban }: { kanban: IKanban }) => {
 };
 
 export const KanbanContainer = styled.div`
+  height: 97%;
   min-width: 27rem;
   display: flex;
   flex-direction: column;

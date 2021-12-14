@@ -12,21 +12,22 @@ import { ProjectDrawer } from './components';
 import { Row, ButtonNoPadding } from 'components/UI';
 import { useProjectModal } from './hooks/useProjectModal';
 import { useAppDispatch } from 'redux/store';
+import { useDebounce } from 'hooks/useDebounce';
 
 export const ProjectListScreen = () => {
   const [searchParams, setSearchParams] = useProjectSearchParams();
+  const debounceProjectParams = useDebounce(searchParams);
   const dispatch = useAppDispatch();
   const users = useSelector(selectUsers);
   const { projects, state } = useSelector(selectProject);
   const { open } = useProjectModal();
 
   useEffect(() => {
-    dispatch(getProjectListAsync(searchParams));
-  }, [searchParams, dispatch]);
+    dispatch(getProjectListAsync(debounceProjectParams));
+  }, [debounceProjectParams, dispatch]);
 
   useEffect(() => {
     const resultAction = dispatch(getUserAsync());
-    console.log('user resultAction', resultAction);
     // if(getUserAsync.fulfilled.match(resultAction)){
     //   console.log('成功');
     // }

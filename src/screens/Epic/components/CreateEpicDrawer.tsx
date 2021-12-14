@@ -27,8 +27,8 @@ export const CreateEpicDrawer = ({
       addEpicAsync({
         projectId,
         name: value.name,
-        start: 1639440000000,
-        end: 1639958400000,
+        start: new Date().getTime(),
+        end: new Date().getTime(),
       }),
     )
       .unwrap()

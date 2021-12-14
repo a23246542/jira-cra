@@ -21,7 +21,10 @@ import { CreateKanban } from './components/CreateKanban';
 import { TaskModal } from './components/TaskModal';
 import { FetchState } from 'types';
 import { Spin } from 'antd';
-import { selectTaskFetchLoading } from 'redux/entities/task.slice';
+import {
+  getTasksAsync,
+  selectTaskFetchLoading,
+} from 'redux/entities/task.slice';
 import {
   Drag,
   Drop,
@@ -30,6 +33,8 @@ import {
 } from 'components/DragDrop';
 import { useDragEnd } from './hooks/useDragEnd';
 import { TypeId } from 'types/sort';
+import { useTaskSearchParams } from './hooks/useTaskSearchParams';
+import { useDebounce } from 'hooks/useDebounce';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -39,6 +44,8 @@ export const KanbanScreen = () => {
   const { currentProject } = useSelector(selectProject);
   const { id: projectId } = useParams();
   const kanbanParams = useKanbanSearchParams();
+  const [taskParams] = useTaskSearchParams();
+  const debounceTaskParams = useDebounce(taskParams);
   const onDragEnd = useDragEnd();
   useEffect(() => {
     projectId && dispatch(getProjectAsync(Number(projectId)));
@@ -47,6 +54,11 @@ export const KanbanScreen = () => {
   useEffect(() => {
     dispatch(getKanbansAsync(kanbanParams));
   }, [kanbanParams, dispatch]);
+
+  useEffect(() => {
+    dispatch(getTasksAsync(debounceTaskParams));
+    // console.log('taskParams', taskParams);
+  }, [debounceTaskParams, dispatch]);
 
   const isLoading = isKanbanFetchLoading || isTaskFetchLoading;
 

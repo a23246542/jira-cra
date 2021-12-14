@@ -14,7 +14,10 @@ type DeleteEpicResponse = {
 export type GetEpicListInput = Partial<IEpic> &
   Pick<IEpic, 'projectId'>;
 
-export type CreateEpicInput = Omit<IEpic, 'id'>;
+export type CreateEpicInput = Partial<Omit<IEpic, 'id'>> & {
+  projectId: number;
+  name: string;
+};
 
 export const epicApi = {
   getEpics: (

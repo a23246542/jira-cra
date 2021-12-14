@@ -52,8 +52,8 @@ export const getTasksAsync = createAsyncThunk(
       //@ts-ignore
       const taskEntity = getState().task;
       if (
-        taskEntity.state === FetchState.LOADING ||
-        taskEntity.state === FetchState.SUCCESS
+        taskEntity.state === FetchState.LOADING
+        // taskEntity.state === FetchState.SUCCESS
       ) {
         return false;
       }

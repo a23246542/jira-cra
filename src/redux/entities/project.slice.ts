@@ -29,7 +29,6 @@ export const getProjectListAsync = createAsyncThunk(
   'project/getProjectListAsync',
   async (params?: Partial<IProject>) => {
     const res = await projectApi.getProjects(params);
-    console.log('getProjectListAsync', res);
 
     if (!Array.isArray(res.data)) {
       return Promise.reject(new Error('get project資料回傳非陣列'));

@@ -42,7 +42,7 @@ export const EpicScreen = () => {
 
   useEffect(() => {
     dispatch(getTasksAsync({ projectId }));
-  });
+  }, [projectId, dispatch]);
 
   const handleCreateBtnClick = () => {
     setIsCreateEpicOpen(true);
