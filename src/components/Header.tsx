@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
-import { Button, Typography } from 'antd';
+import { Button, Dropdown, Typography, Menu } from 'antd';
 import { useNavigate } from 'react-router';
 import { useAuth } from 'hooks/useAuth';
 import { Row } from './UI';
 
 import { ReactComponent as SofewareLogo } from 'assets/software-logo.svg';
 import colors from 'theme/colors';
+import { UserPopover } from './UserPopover';
+import { ProjectPopover } from './ProjectPopover';
 
 export const AuthHeader = () => {
-  const { logout } = useAuth();
   const navigate = useNavigate();
   return (
     <HeaderContentContainer between>
@@ -19,13 +20,34 @@ export const AuthHeader = () => {
           color={colors.primary}
           style={{ cursor: 'pointer' }}
         />
-        <Typography.Text>專案</Typography.Text>
-        <Typography.Text>組員</Typography.Text>
+        <ProjectPopover />
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
-        <Button onClick={logout}>登出</Button>
+        <User />
       </HeaderRight>
     </HeaderContentContainer>
+  );
+};
+
+const User = () => {
+  const { user, logout } = useAuth();
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key="logout">
+            <Button onClick={logout} type="link">
+              登出
+            </Button>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type="link" onClick={(e) => e.preventDefault()}>
+        Hi, {user?.name}
+      </Button>
+    </Dropdown>
   );
 };
 
