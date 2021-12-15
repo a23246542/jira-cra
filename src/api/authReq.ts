@@ -11,8 +11,8 @@ export const authApi = {
     return await unAuthIntance
       .post('/register', data)
       .then(async (res) => {
-        await convertStorage();
-        window.location.reload();
+        // await convertStorage();
+        // window.location.reload();
         return res;
       });
   },
