@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  projectScreenActions,
+  projectListScreenActions,
   selectProjectModalOpen,
-} from 'redux/projectScreen';
+} from 'redux/projectListScreen.slice';
 import {
   getProjectAsync,
   selectProject,
@@ -21,18 +21,18 @@ export const useProjectModal = () => {
 
   const startEdit = useCallback(
     (id: number) => {
-      dispatch(projectScreenActions.openProjectModal());
+      dispatch(projectListScreenActions.openProjectModal());
       dispatch(getProjectAsync(id));
     },
     [dispatch],
   );
 
   const open = useCallback(() => {
-    dispatch(projectScreenActions.openProjectModal());
+    dispatch(projectListScreenActions.openProjectModal());
   }, [dispatch]);
 
   const close = useCallback(() => {
-    dispatch(projectScreenActions.closeProjectModal());
+    dispatch(projectListScreenActions.closeProjectModal());
   }, [dispatch]);
 
   return {

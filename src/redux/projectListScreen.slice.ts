@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 
-interface ProjectScreenSliceState {
+interface ProjectListScreenSliceState {
   projectModalOpen: boolean;
 }
 
-const initialState: ProjectScreenSliceState = {
+const initialState: ProjectListScreenSliceState = {
   projectModalOpen: false,
 };
 
-export const projectScreenSlice = createSlice({
-  name: 'projectScreen',
+export const projectListScreenSlice = createSlice({
+  name: 'projectListScreen',
   initialState,
   reducers: {
     openProjectModal(state) {
@@ -22,7 +22,8 @@ export const projectScreenSlice = createSlice({
   },
 });
 
-export const projectScreenActions = projectScreenSlice.actions;
+export const projectListScreenActions =
+  projectListScreenSlice.actions;
 
 export const selectProjectModalOpen = (state: RootState) =>
-  state.projectScreen.projectModalOpen;
+  state.projectListScreen.projectModalOpen;

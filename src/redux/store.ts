@@ -8,7 +8,7 @@ import { taskSlice } from './entities/task.slice';
 import { taskTypeSlice } from './entities/taskType.slice';
 import { epicSlice } from './entities/epic.slice';
 import { authScreenSlice } from './authScreen.slice';
-import { projectScreenSlice } from './projectScreen';
+import { projectListScreenSlice } from './projectListScreen.slice';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,7 +20,7 @@ const rootReducer = {
   task: taskSlice.reducer,
   epic: epicSlice.reducer,
   taskType: taskTypeSlice.reducer,
-  projectScreen: projectScreenSlice.reducer,
+  projectListScreen: projectListScreenSlice.reducer,
   authScrren: authScreenSlice.reducer,
 };
 
