@@ -13,7 +13,6 @@ import {
 import { FetchState } from 'types/common';
 import { RootState, AppDispatch } from 'redux/store';
 import { ITask } from 'types/task';
-import { stat } from 'fs';
 import { TaskSortProps } from 'types/sort';
 import { reorder } from 'utils/reorder';
 
@@ -49,17 +48,12 @@ export const getTasksAsync = createAsyncThunk(
   },
   {
     condition(params, { getState }) {
-      //@ts-ignore
-      const taskEntity = getState().task;
-      if (
-        taskEntity.state === FetchState.LOADING
-        // taskEntity.state === FetchState.SUCCESS
-      ) {
+      const { task } = getState() as RootState;
+      if (task.state === FetchState.LOADING) {
         return false;
       }
       // if ( //reorder呼叫會被擋下來
-      //   // @ts-ignore
-      //   params.projectId === getState().task.fetchingTasksProjectId
+      //   params.projectId === task.fetchingTasksProjectId
       // ) {
       //   return false;
       // }
@@ -80,10 +74,8 @@ export const getTaskAsync = createAsyncThunk(
   },
   {
     condition(params, { getState }) {
-      if (
-        // @ts-ignore
-        getState().task.currentTaskState === FetchState.LOADING
-      ) {
+      const { task } = getState() as RootState;
+      if (task.currentTaskState === FetchState.LOADING) {
         return false;
       }
     },
@@ -110,9 +102,10 @@ export const deleteTaskAsync = createAsyncThunk(
   'task/deleteTaskAsync',
   async (id: number, { dispatch, getState }) => {
     const res = await taskApi.deleteTask(id);
+    const { project } = getState() as RootState;
+    if (!project.currentProject) return;
     if (res.data.success) {
-      //@ts-ignore
-      const projectId = getState().project.currentProject.id;
+      const projectId = project.currentProject.id;
       dispatch(getTasksAsync({ projectId }));
     }
     return res.data;

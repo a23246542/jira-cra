@@ -49,13 +49,14 @@ export const addKanbanAsync = createAsyncThunk(
 
 export const deleteKanbanAsync = createAsyncThunk(
   'kanban/deleteKanban',
-  async (id: number, thunkAPI) => {
+  async (id: number, { dispatch, getState }) => {
     const res = await kanbanApi.deleteKanban(id);
+    const { project } = getState() as RootState;
+    if (!project.currentProject) return;
     if (res.data.success) {
-      thunkAPI.dispatch(
+      dispatch(
         getKanbansAsync({
-          //@ts-ignore
-          projectId: thunkAPI.getState().project.currentProject.id,
+          projectId: project.currentProject.id,
         }),
       );
     }

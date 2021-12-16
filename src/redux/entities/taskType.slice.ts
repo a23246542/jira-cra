@@ -25,12 +25,11 @@ export const getTaskTypesAsync = createAsyncThunk(
   },
   {
     condition(_, { getState }) {
-      //@ts-ignore
-      if (getState().taskType.taskTypes.length > 0) {
+      const { taskType } = getState() as RootState;
+      if (taskType.taskTypes.length > 0) {
         return false;
       }
-      //@ts-ignore
-      if (getState().taskType.state === FetchState.LOADING) {
+      if (taskType.state === FetchState.LOADING) {
         return false;
       }
     },

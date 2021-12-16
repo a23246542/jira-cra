@@ -1,10 +1,15 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  AsyncThunkPayloadCreator,
+  AsyncThunk,
+} from '@reduxjs/toolkit';
 
 import { userApi } from 'api/userReq';
 
 import { IUser } from 'types/user';
 import { FetchState } from 'types/common';
-import { RootState, AppDispatch } from 'redux/store';
+import { RootState } from 'redux/store';
 
 interface UserSliceState {
   users: Array<IUser>;
@@ -19,12 +24,6 @@ const initialState: UserSliceState = {
 };
 
 export const getUserAsync = createAsyncThunk(
-  // <
-  // IUser,
-  // Partial<IUser>,
-  // { dispatch: AppDispatch; state: RootState }
-  // >
-  // export const getUserAsync = createAsyncThunk(
   'project/getUserAsync',
   async (params: Partial<IUser> | undefined, thunkAPI) => {
     const res = await userApi.getUserData(params);
@@ -32,8 +31,8 @@ export const getUserAsync = createAsyncThunk(
   },
   {
     condition: (_, { getState }) => {
-      // @ts-ignore
-      if (getState().user.users.length > 0) {
+      const { user } = getState() as RootState;
+      if (user.users.length > 0) {
         return false;
       }
     },
