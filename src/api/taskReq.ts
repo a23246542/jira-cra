@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { authGetIntance, authIntance } from './instance';
+import { authIntance } from './instance';
 import qs from 'qs';
 import { ITask } from 'types/task';
 import { cleanObject } from 'utils/cleanObject';
@@ -33,10 +33,10 @@ export const taskApi = {
   getTasks: (
     params: GetTaskListInput,
   ): Promise<AxiosResponse<GetTasksResponse>> => {
-    return authGetIntance.get(`/tasks?${qs.stringify(params)}`);
+    return authIntance.get(`/tasks?${qs.stringify(params)}`);
   },
   getTask: (id: number): Promise<AxiosResponse<GetTaskResponse>> => {
-    return authGetIntance.get(`tasks/${id}`);
+    return authIntance.get(`tasks/${id}`);
   },
   createTask: (
     params: CreateTaskInput,

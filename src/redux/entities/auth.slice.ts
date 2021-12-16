@@ -30,7 +30,6 @@ export const loginAsyncAction = createAsyncThunk(
   'auth/login',
   async (data: AuthForm) => {
     const res = await authApi.login(data);
-    console.log('login res', res);
     return res.data.user;
   },
 );
@@ -62,8 +61,6 @@ export const authSlice = createSlice({
       state.state = FetchState.LOADING;
     },
     [registerAsyncAction.fulfilled.type]: (state, action) => {
-      console.log('register payload', action.payload);
-
       state.state = FetchState.SUCCESS;
       state.user = action.payload;
       state.error = null;
@@ -72,7 +69,6 @@ export const authSlice = createSlice({
       state.state = FetchState.FAILED;
       state.user = null;
       state.error = action.error;
-      alert(action.error.message);
     },
     [loginAsyncAction.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
@@ -83,6 +79,7 @@ export const authSlice = createSlice({
       state.error = null;
     },
     [loginAsyncAction.rejected.type]: (state, action) => {
+      console.log('login action', action);
       state.state = FetchState.FAILED;
       state.user = null;
       state.error = action.error;

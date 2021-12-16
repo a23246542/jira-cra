@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { authGetIntance, authIntance } from './instance';
+import { authIntance } from './instance';
 import qs from 'qs';
 import { IKanban } from 'types/kanban';
 import { KanbanSortProps } from 'types/sort';
@@ -26,7 +26,7 @@ export const kanbanApi = {
   getKanbans: (
     params?: GetKanbanListInput,
   ): Promise<AxiosResponse<GetKanbansResponse>> => {
-    return authGetIntance.get(`/kanbans?${qs.stringify(params)}`);
+    return authIntance.get(`/kanbans?${qs.stringify(params)}`);
   },
   createKanban: (
     params: CreateKanbanInput,

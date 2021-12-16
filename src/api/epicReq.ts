@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { authGetIntance, authIntance } from './instance';
+import { authIntance } from './instance';
 import qs from 'qs';
 import { IEpic } from 'types/epic';
 
@@ -23,7 +23,7 @@ export const epicApi = {
   getEpics: (
     params?: GetEpicListInput,
   ): Promise<AxiosResponse<GetEpicsResponse>> => {
-    return authGetIntance.get(`/epics?${qs.stringify(params)}`);
+    return authIntance.get(`/epics?${qs.stringify(params)}`);
   },
   createEpic: (
     params: CreateEpicInput,

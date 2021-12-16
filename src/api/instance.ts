@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -20,18 +20,27 @@ export const unAuthIntance = axios.create({
   headers: { 'content-Type': 'application/json' },
 });
 
+export const authIntance = axios.create({
+  baseURL: apiUrl,
+});
+
+const hasErrorResponse = (
+  err: any,
+): err is AxiosError<{ status: number; message: string }> =>
+  err?.response;
+
 unAuthIntance.interceptors.response.use(
   (response) => {
     return handleUserResponse(response);
   },
   (error) => {
+    console.error('unAuthIntance api error', error);
+    if (hasErrorResponse(error)) {
+      return Promise.reject(error.response?.data);
+    }
     return Promise.reject(error);
   },
 );
-
-export const authIntance = axios.create({
-  baseURL: apiUrl,
-});
 
 authIntance.interceptors.request.use(
   (config) => {
@@ -43,53 +52,19 @@ authIntance.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('api有誤', error);
-    return Promise.reject(error);
-  },
-);
-
-export const authGetIntance = axios.create({
-  baseURL: apiUrl,
-});
-
-authGetIntance.interceptors.request.use(
-  (config) => {
-    const token = getToken();
-    config.headers = {
-      Authorization: token ? `Bearer ${token}` : '',
-      'content-type': 'application/json',
-    };
-
-    return config;
-  },
-  (error) => {
-    console.error('api有誤', error);
     return Promise.reject(error);
   },
 );
 
 authIntance.interceptors.response.use(
   async (response) => {
-    if (response.status === 401) {
-      return Promise.reject({ message: '請重新登入' });
-    }
     return response;
   },
   (error) => {
-    console.error('api失敗', error);
-    return Promise.reject(error);
-  },
-);
-
-authGetIntance.interceptors.response.use(
-  async (response) => {
-    if (response.status === 401) {
-      return Promise.reject({ message: '請重新登入' });
+    console.error('authIntance api error', error);
+    if (hasErrorResponse(error)) {
+      return Promise.reject(error.response?.data);
     }
-    return response;
-  },
-  (error) => {
-    console.error('api失敗', error);
     return Promise.reject(error);
   },
 );
