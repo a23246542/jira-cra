@@ -8,17 +8,19 @@ import { FetchState, AuthForm } from 'types/common';
 
 interface AuthSliceState {
   user: IUser | null;
-  state: FetchState;
+  initUserState: FetchState;
+  loginState: FetchState;
   error: Error | null;
 }
 
 const initialState: AuthSliceState = {
   user: null,
-  state: FetchState.IDLE,
+  initUserState: FetchState.IDLE,
+  loginState: FetchState.IDLE,
   error: null,
 };
 
-export const registerAsyncAction = createAsyncThunk(
+export const registerAsync = createAsyncThunk(
   'auth/register',
   async (data: AuthForm, thunkAPI) => {
     const res = await authApi.register(data);
@@ -26,7 +28,7 @@ export const registerAsyncAction = createAsyncThunk(
   },
 );
 
-export const loginAsyncAction = createAsyncThunk(
+export const loginAsync = createAsyncThunk(
   'auth/login',
   async (data: AuthForm) => {
     const res = await authApi.login(data);
@@ -34,7 +36,7 @@ export const loginAsyncAction = createAsyncThunk(
   },
 );
 
-export const initUserAsyncAction = createAsyncThunk(
+export const initUserAsync = createAsyncThunk(
   'auth/initUser',
   async () => {
     let user = null;
@@ -55,52 +57,54 @@ export const authSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload;
     },
+    clearAuthError(state) {
+      state.error = null;
+    },
   },
   extraReducers: {
-    [registerAsyncAction.pending.type]: (state) => {
-      state.state = FetchState.LOADING;
+    [registerAsync.pending.type]: (state) => {
+      state.loginState = FetchState.LOADING;
     },
-    [registerAsyncAction.fulfilled.type]: (state, action) => {
-      state.state = FetchState.SUCCESS;
+    [registerAsync.fulfilled.type]: (state, action) => {
+      state.loginState = FetchState.SUCCESS;
       state.user = action.payload;
       state.error = null;
     },
-    [registerAsyncAction.rejected.type]: (state, action) => {
-      state.state = FetchState.FAILED;
+    [registerAsync.rejected.type]: (state, action) => {
+      state.loginState = FetchState.FAILED;
       state.user = null;
       state.error = action.error;
     },
-    [loginAsyncAction.pending.type]: (state, action) => {
-      state.state = FetchState.LOADING;
+    [loginAsync.pending.type]: (state, action) => {
+      state.loginState = FetchState.LOADING;
     },
-    [loginAsyncAction.fulfilled.type]: (state, action) => {
-      state.state = FetchState.SUCCESS;
+    [loginAsync.fulfilled.type]: (state, action) => {
+      state.loginState = FetchState.SUCCESS;
       state.user = action.payload;
       state.error = null;
     },
-    [loginAsyncAction.rejected.type]: (state, action) => {
-      console.log('login action', action);
-      state.state = FetchState.FAILED;
+    [loginAsync.rejected.type]: (state, action) => {
+      state.loginState = FetchState.FAILED;
       state.user = null;
       state.error = action.error;
     },
-    [initUserAsyncAction.pending.type]: (state, action) => {
-      state.state = FetchState.LOADING;
+    [initUserAsync.pending.type]: (state, action) => {
+      state.initUserState = FetchState.LOADING;
     },
-    [initUserAsyncAction.fulfilled.type]: (state, action) => {
-      state.state = FetchState.SUCCESS;
+    [initUserAsync.fulfilled.type]: (state, action) => {
+      state.initUserState = FetchState.SUCCESS;
       state.user = action.payload;
       state.error = null;
     },
-    [initUserAsyncAction.rejected.type]: (state, action) => {
-      state.state = FetchState.FAILED;
+    [initUserAsync.rejected.type]: (state, action) => {
+      state.initUserState = FetchState.FAILED;
       state.user = null;
       state.error = action.error;
     },
   },
 });
 
-const { setUser } = authSlice.actions;
+export const { setUser, clearAuthError } = authSlice.actions;
 
 export const logoutAction = () => (dispatch: AppDispatch) =>
   authApi.logout().then(() => {
@@ -108,5 +112,8 @@ export const logoutAction = () => (dispatch: AppDispatch) =>
   });
 
 export const selectUser = (state: RootState) => state.auth.user;
-export const selectUserState = (state: RootState) => state.auth.state;
+export const selectInitUserState = (state: RootState) =>
+  state.auth.initUserState;
+export const selectIsLoginLoading = (state: RootState) =>
+  state.auth.loginState === FetchState.LOADING;
 export const selectUserError = (state: RootState) => state.auth.error;

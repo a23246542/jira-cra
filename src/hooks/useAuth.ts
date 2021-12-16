@@ -1,31 +1,44 @@
 import { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
-  loginAsyncAction,
-  registerAsyncAction,
+  loginAsync,
+  registerAsync,
   logoutAction,
   selectUser,
+  selectIsLoginLoading,
 } from 'redux/entities/auth.slice';
+import {
+  setUnAuthError,
+  switchRegisterAction,
+} from 'redux/authScreen.slice';
+import { useAppDispatch } from 'redux/store';
 
 import { AuthForm } from 'types/common';
-import { IUser } from 'types/user';
 
 export const useAuth = () => {
-  const dispatch: (...args: unknown[]) => Promise<IUser> =
-    useDispatch();
+  const dispatch = useAppDispatch();
 
   const user = useSelector(selectUser);
+  const isLoginLoading = useSelector(selectIsLoginLoading);
 
   const register = useCallback(
-    (form: AuthForm) => {
-      dispatch(registerAsyncAction(form));
+    (form: AuthForm & { cpassword: string }) => {
+      if (form.cpassword !== form.password) {
+        dispatch(setUnAuthError('請確認兩次輸入的密碼相容'));
+        return;
+      }
+      dispatch(registerAsync(form))
+        .unwrap()
+        .then(() => {
+          dispatch(switchRegisterAction(true));
+        });
     },
     [dispatch],
   );
 
   const login = useCallback(
     (form: AuthForm) => {
-      dispatch(loginAsyncAction(form));
+      dispatch(loginAsync(form));
     },
     [dispatch],
   );
@@ -39,5 +52,6 @@ export const useAuth = () => {
     register,
     login,
     logout,
+    isLoginLoading,
   };
 };

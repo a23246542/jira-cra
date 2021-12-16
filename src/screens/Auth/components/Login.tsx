@@ -4,7 +4,7 @@ import { useAuth } from 'hooks/useAuth';
 import { AuthForm } from 'types/common';
 
 export const Login = () => {
-  const { login } = useAuth();
+  const { login, isLoginLoading } = useAuth();
 
   const handleSubmit = (value: AuthForm) => {
     login(value);
@@ -34,7 +34,11 @@ export const Login = () => {
         <Input placeholder="密碼" type="password" id="password" />
       </Form.Item>
       <Form.Item>
-        <LongButton htmlType="submit" type="primary">
+        <LongButton
+          htmlType="submit"
+          loading={isLoginLoading}
+          type="primary"
+        >
           登入
         </LongButton>
       </Form.Item>

@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 // import { Outlet, Navigate } from 'react-router-dom';
 import {
-  initUserAsyncAction,
-  selectUser,
-  selectUserState,
+  initUserAsync,
+  selectInitUserState,
   selectUserError,
 } from 'redux/entities/auth.slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,12 +14,12 @@ interface IAuthProvider {
 }
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
-  const state = useSelector(selectUserState);
+  const state = useSelector(selectInitUserState);
   const error = useSelector(selectUserError);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(initUserAsyncAction());
+    dispatch(initUserAsync());
   }, [dispatch]);
 
   if (state === FetchState.IDLE || state === FetchState.LOADING) {
