@@ -9,17 +9,22 @@ export const useUrlQueryParams = <K extends string>(
   keys: Array<K>,
 ) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [keysState] = useState(keys);
+  const [querykeys] = useState(keys);
 
   const paramsObj = useMemo(() => {
-    const obj = keysState.reduce((pre, key) => {
-      return {
-        ...pre,
-        [key]: searchParams.get(key) || undefined,
-      };
-    }, {} as { [key in K]: string });
+    const obj = querykeys.reduce(
+      (pre, key) => {
+        return {
+          ...pre,
+          [key]: searchParams.get(key) || undefined,
+        };
+      },
+      { ...Object.fromEntries(searchParams) } as {
+        [key in K]: string;
+      },
+    );
     return obj;
-  }, [keysState, searchParams]);
+  }, [querykeys, searchParams]);
 
   const setParams = useCallback(
     (updateParams: Partial<{ [key in K]: unknown }>) => {
@@ -30,7 +35,7 @@ export const useUrlQueryParams = <K extends string>(
         }) as URLSearchParamsInit,
       );
     },
-    [],
+    [paramsObj, setSearchParams],
   );
 
   return [paramsObj, setParams] as const;
