@@ -20,8 +20,6 @@ export const IdSelect = ({
   const numberValue = toNumber(value);
 
   const handleSelectChange = (value: unknown) => {
-    console.log('value', value);
-
     onChange?.(toNumber(value));
   };
 

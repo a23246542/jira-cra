@@ -9,6 +9,9 @@ import { taskTypeSlice } from './entities/taskType.slice';
 import { epicSlice } from './entities/epic.slice';
 import { authScreenSlice } from './authScreen.slice';
 import { projectListScreenSlice } from './projectListScreen.slice';
+import { projectScreenSlice } from './projectScreen.slice';
+import { kanbanScreenSlice } from './kanbanScreen.slice';
+import { epicScreenSlice } from './epicScreen.slice';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,8 +23,11 @@ const rootReducer = {
   task: taskSlice.reducer,
   epic: epicSlice.reducer,
   taskType: taskTypeSlice.reducer,
-  projectListScreen: projectListScreenSlice.reducer,
   authScrren: authScreenSlice.reducer,
+  projectListScreen: projectListScreenSlice.reducer,
+  projectScreen: projectScreenSlice.reducer,
+  kanbanScreen: kanbanScreenSlice.reducer,
+  epicScreen: epicScreenSlice.reducer,
 };
 
 export const store = configureStore({

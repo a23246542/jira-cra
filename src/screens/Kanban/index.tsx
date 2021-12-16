@@ -35,12 +35,14 @@ import { useDragEnd } from './hooks/useDragEnd';
 import { TypeId } from 'types/sort';
 import { useTaskSearchParams } from './hooks/useTaskSearchParams';
 import { useDebounce } from 'hooks/useDebounce';
+import { selectIsKanbanInitLoading } from 'redux/kanbanScreen.slice';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
   const kanbans = useSelector(selectKanbans);
   const isKanbanFetchLoading = useSelector(selectKanbanFetchLoading);
   const isTaskFetchLoading = useSelector(selectTaskFetchLoading);
+  const isKanbanInitLoading = useSelector(selectIsKanbanInitLoading);
   const { currentProject } = useSelector(selectProject);
   const { id: projectId } = useParams();
   const kanbanParams = useKanbanSearchParams();
@@ -57,42 +59,47 @@ export const KanbanScreen = () => {
 
   useEffect(() => {
     dispatch(getTasksAsync(debounceTaskParams));
-    // console.log('taskParams', taskParams);
   }, [debounceTaskParams, dispatch]);
 
-  const isLoading = isKanbanFetchLoading || isTaskFetchLoading;
+  const isKanbanLoading = isKanbanFetchLoading || isTaskFetchLoading;
 
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <ContentContainer>
-          <h1>{currentProject?.name}</h1>
-          <SearchPanel />
-          {isLoading ? (
-            <Spin size="large" />
+          {isKanbanInitLoading ? (
+            <StyleSpin size="large" />
           ) : (
-            <ColumnsContainer>
-              <Drop
-                type={TypeId.COLUMN}
-                droppableId="kanbanContainer"
-                direction="horizontal"
-              >
-                <DropChild style={{ display: 'flex' }}>
-                  {kanbans?.map((kanban, index) => (
-                    <Drag
-                      key={kanban.id}
-                      draggableId={`kanban_${kanban.id}`}
-                      index={index}
-                    >
-                      <DragChild>
-                        <KanbanColumn kanban={kanban} />
-                      </DragChild>
-                    </Drag>
-                  ))}
-                </DropChild>
-              </Drop>
-              <CreateKanban />
-            </ColumnsContainer>
+            <>
+              <h1>{currentProject?.name}</h1>
+              <SearchPanel />
+              {isKanbanLoading ? (
+                <Spin size="large" />
+              ) : (
+                <ColumnsContainer>
+                  <Drop
+                    type={TypeId.COLUMN}
+                    droppableId="kanbanContainer"
+                    direction="horizontal"
+                  >
+                    <DropChild style={{ display: 'flex' }}>
+                      {kanbans?.map((kanban, index) => (
+                        <Drag
+                          key={kanban.id}
+                          draggableId={`kanban_${kanban.id}`}
+                          index={index}
+                        >
+                          <DragChild>
+                            <KanbanColumn kanban={kanban} />
+                          </DragChild>
+                        </Drag>
+                      ))}
+                    </DropChild>
+                  </Drop>
+                  <CreateKanban />
+                </ColumnsContainer>
+              )}
+            </>
           )}
         </ContentContainer>
       </DragDropContext>
@@ -105,4 +112,9 @@ const ColumnsContainer = styled.div`
   flex: 1;
   display: flex;
   overflow-x: auto;
+`;
+
+const StyleSpin = styled(Spin)`
+  margin-top: 30rem;
+  transform: scale(1.2);
 `;
