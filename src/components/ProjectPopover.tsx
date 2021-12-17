@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 import { Button, Divider, List, Popover, Typography } from 'antd';
 import { selectProjectList } from 'redux/entities/project.slice';
-import { useProjectModal } from 'screens/ProjectList/hooks/useProjectModal';
+import { useProjectDrawer } from 'screens/ProjectList/hooks/useProjectDrawer';
 import { Link } from 'react-router-dom';
 
 export const ProjectPopover = () => {
@@ -10,7 +10,7 @@ export const ProjectPopover = () => {
   const pinProjectList = projectList?.filter(
     (project) => project.pin,
   );
-  const { open } = useProjectModal();
+  const { open } = useProjectDrawer();
 
   const content = (
     <Container>

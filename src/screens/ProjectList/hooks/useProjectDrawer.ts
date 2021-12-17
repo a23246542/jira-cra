@@ -2,27 +2,24 @@ import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   projectListScreenActions,
+  selectEditProject,
+  selectEditProjectState,
   selectProjectModalOpen,
 } from 'redux/projectListScreen.slice';
-import {
-  getProjectAsync,
-  selectProject,
-} from 'redux/entities/project.slice';
+import { selectProject } from 'redux/entities/project.slice';
 import { FetchState } from 'types';
 
-export const useProjectModal = () => {
+export const useProjectDrawer = () => {
   const dispatch = useDispatch();
   const isOpen = useSelector(selectProjectModalOpen);
-  const {
-    currentProject: editingProject,
-    state,
-    mutateState,
-  } = useSelector(selectProject);
+  const editingProject = useSelector(selectEditProject);
+  const editingProjectState = useSelector(selectEditProjectState);
+  const { mutateState } = useSelector(selectProject);
 
   const startEdit = useCallback(
     (id: number) => {
       dispatch(projectListScreenActions.openProjectModal());
-      dispatch(getProjectAsync(id));
+      dispatch(projectListScreenActions.getEditProjectAsync(id));
     },
     [dispatch],
   );
@@ -33,6 +30,7 @@ export const useProjectModal = () => {
 
   const close = useCallback(() => {
     dispatch(projectListScreenActions.closeProjectModal());
+    dispatch(projectListScreenActions.clearEditProject());
   }, [dispatch]);
 
   return {
@@ -41,7 +39,7 @@ export const useProjectModal = () => {
     startEdit,
     close,
     editingProject,
-    isLoading: state === FetchState.LOADING,
+    isLoading: editingProjectState === FetchState.LOADING,
     isMutateLoading: mutateState === FetchState.LOADING,
   };
 };

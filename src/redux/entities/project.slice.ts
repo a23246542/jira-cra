@@ -76,6 +76,9 @@ export const projectSlice = createSlice({
     setProject(state, action) {
       state.projects = action.payload;
     },
+    clearCurrentProject(state) {
+      state.currentProject = null;
+    },
   },
   extraReducers: {
     [getProjectListAsync.pending.type]: (state, action) => {
@@ -110,7 +113,6 @@ export const projectSlice = createSlice({
     },
     [getProjectAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
-      state.projects = [];
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -175,6 +177,8 @@ export const projectSlice = createSlice({
     },
   },
 });
+
+export const projectActions = projectSlice.actions;
 
 export const selectProject = (state: RootState) => state.project;
 

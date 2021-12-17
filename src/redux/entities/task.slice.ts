@@ -194,7 +194,7 @@ export const taskSlice = createSlice({
       state.mutateState = FetchState.SUCCESS;
       state.tasks.forEach((task, index) => {
         if (task.id === action.payload.id) {
-          state.tasks[index] = action.payload;
+          state.tasks[index] = { ...task, ...action.payload };
         }
       });
       state.error = null;

@@ -7,7 +7,7 @@ import {
   deleteProjectAsync,
   editProjectAsync,
 } from 'redux/entities/project.slice';
-import { useProjectModal } from '../hooks/useProjectModal';
+import { useProjectDrawer } from '../hooks/useProjectDrawer';
 import { ButtonNoPadding } from 'components/UI';
 import { IProject, IUser } from 'types';
 import { useAppDispatch } from 'redux/store';
@@ -89,7 +89,7 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
 };
 
 const More = ({ project }: { project: IProject }) => {
-  const { startEdit } = useProjectModal();
+  const { startEdit } = useProjectDrawer();
   const dispatch = useAppDispatch();
 
   const handleEditProject = () => {

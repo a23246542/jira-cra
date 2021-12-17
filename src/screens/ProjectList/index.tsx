@@ -10,7 +10,7 @@ import {
 import { getUserAsync, selectUsers } from 'redux/entities/user.slice';
 import { ProjectDrawer } from './components';
 import { Row, ButtonNoPadding } from 'components/UI';
-import { useProjectModal } from './hooks/useProjectModal';
+import { useProjectDrawer } from './hooks/useProjectDrawer';
 import { useAppDispatch } from 'redux/store';
 import { useDebounce } from 'hooks/useDebounce';
 
@@ -20,7 +20,7 @@ export const ProjectListScreen = () => {
   const dispatch = useAppDispatch();
   const users = useSelector(selectUsers);
   const { projects, state } = useSelector(selectProject);
-  const { open } = useProjectModal();
+  const { open } = useProjectDrawer();
 
   useEffect(() => {
     dispatch(getProjectListAsync(debounceProjectParams));

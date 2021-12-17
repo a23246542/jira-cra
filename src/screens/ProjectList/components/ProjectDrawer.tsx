@@ -1,7 +1,7 @@
 import { Drawer, Form, Input, Button, Spin } from 'antd';
 import styled from '@emotion/styled';
 import { UserSelect } from 'components/UserSelect';
-import { useProjectModal } from '../hooks/useProjectModal';
+import { useProjectDrawer } from '../hooks/useProjectDrawer';
 import { useEffect } from 'react';
 import {
   addProjectAsync,
@@ -20,7 +20,7 @@ export const ProjectDrawer = () => {
     editingProject,
     isLoading,
     isMutateLoading,
-  } = useProjectModal();
+  } = useProjectDrawer();
   const dispatch = useAppDispatch();
 
   const title = editingProject ? '編輯專案' : '新增專案';
@@ -60,7 +60,8 @@ export const ProjectDrawer = () => {
     <Drawer
       visible={isOpen}
       onClose={handleCloseProjectModal}
-      forceRender={true}
+      forceRender
+      // destroyOnClose
       width="100%"
     >
       <DrawerContentContainer>
