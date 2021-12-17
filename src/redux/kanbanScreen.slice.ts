@@ -15,7 +15,8 @@ export const kanbanScreenSlice = createSlice({
 export const selectIsKanbanInitLoading = (state: RootState) => {
   return (
     state.project.state === FetchState.LOADING ||
-    state.user.state === FetchState.LOADING
+    state.user.state === FetchState.LOADING ||
+    state.taskType.state === FetchState.LOADING
     // state.kanban.state === FetchState.LOADING ||
     // state.task.state === FetchState.LOADING
   );

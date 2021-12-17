@@ -26,10 +26,13 @@ export const getTaskTypesAsync = createAsyncThunk(
   {
     condition(_, { getState }) {
       const { taskType } = getState() as RootState;
-      if (taskType.taskTypes.length > 0) {
-        return false;
-      }
-      if (taskType.state === FetchState.LOADING) {
+      // if (taskType.taskTypes.length > 0) {
+      //   return false;
+      // }
+      if (
+        taskType.state === FetchState.LOADING ||
+        taskType.state === FetchState.SUCCESS
+      ) {
         return false;
       }
     },

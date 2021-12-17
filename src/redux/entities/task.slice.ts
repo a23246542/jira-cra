@@ -52,11 +52,6 @@ export const getTasksAsync = createAsyncThunk(
       if (task.state === FetchState.LOADING) {
         return false;
       }
-      // if ( //reorder呼叫會被擋下來
-      //   params.projectId === task.fetchingTasksProjectId
-      // ) {
-      //   return false;
-      // }
     },
     getPendingMeta({ arg, requestId }, { getState, extra }) {
       return {

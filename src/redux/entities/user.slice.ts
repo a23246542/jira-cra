@@ -32,6 +32,12 @@ export const getUserAsync = createAsyncThunk(
   {
     condition: (_, { getState }) => {
       const { user } = getState() as RootState;
+      if (
+        user.state === FetchState.LOADING ||
+        user.state === FetchState.SUCCESS
+      ) {
+        return false;
+      }
       if (user.users.length > 0) {
         return false;
       }
