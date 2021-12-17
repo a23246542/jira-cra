@@ -71,7 +71,7 @@ export const KanbanScreen = () => {
             <StyleSpin size="large" />
           ) : (
             <>
-              <h1>{currentProject?.name}</h1>
+              <h1>{currentProject?.name}看板</h1>
               <SearchPanel />
               {isKanbanLoading ? (
                 <Spin size="large" />
