@@ -2,6 +2,7 @@ import { Input, Spin } from 'antd';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
+  addKanbanActionAsync,
   addKanbanAsync,
   selectMutateLoading,
 } from 'redux/entities/kanban.slice';
@@ -19,26 +20,24 @@ export const CreateKanban = () => {
     if (!name || !projectId) {
       return;
     }
-    dispatch(addKanbanAsync({ projectId, name }))
-      .unwrap()
-      .then(() => {
-        setName('');
-      });
+    dispatch(addKanbanActionAsync({ projectId, name })).then(() => {
+      setName('');
+    });
   };
 
   return (
     <KanbanContainer>
-      {isMutateLoading ? (
+      {/* {isMutateLoading ? (
         <Spin size="small" />
-      ) : (
-        <Input
-          placeholder="新建看板名稱"
-          value={name}
-          onChange={(evt) => setName(evt.target.value.trim())}
-          size="large"
-          onPressEnter={handleSubmitKanban}
-        />
-      )}
+      ) : ( */}
+      <Input
+        placeholder="新建看板名稱"
+        value={name}
+        onChange={(evt) => setName(evt.target.value.trim())}
+        size="large"
+        onPressEnter={handleSubmitKanban}
+      />
+      {/* )} */}
     </KanbanContainer>
   );
 };

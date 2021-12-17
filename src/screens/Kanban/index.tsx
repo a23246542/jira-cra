@@ -36,6 +36,7 @@ import { TypeId } from 'types/sort';
 import { useTaskSearchParams } from './hooks/useTaskSearchParams';
 import { useDebounce } from 'hooks/useDebounce';
 import { selectIsKanbanInitLoading } from 'redux/kanbanScreen.slice';
+import { IKanban } from 'types/kanban';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -63,6 +64,7 @@ export const KanbanScreen = () => {
 
   const isKanbanLoading = isKanbanFetchLoading || isTaskFetchLoading;
 
+  const isKanbanType = (value: any): value is IKanban => value?.id;
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -90,7 +92,9 @@ export const KanbanScreen = () => {
                           index={index}
                         >
                           <DragChild>
-                            <KanbanColumn kanban={kanban} />
+                            {isKanbanType(kanban) && (
+                              <KanbanColumn kanban={kanban} />
+                            )}
                           </DragChild>
                         </Drag>
                       ))}
