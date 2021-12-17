@@ -5,7 +5,8 @@ import { useProjectSearchParams } from './hooks/useProjectSearchParams';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getProjectListAsync,
-  selectProject,
+  selectIsProjectLoading,
+  selectProjectList,
 } from 'redux/entities/project.slice';
 import { getUserAsync, selectUsers } from 'redux/entities/user.slice';
 import { ProjectDrawer } from './components';
@@ -19,7 +20,8 @@ export const ProjectListScreen = () => {
   const debounceProjectParams = useDebounce(searchParams);
   const dispatch = useAppDispatch();
   const users = useSelector(selectUsers);
-  const { projects, state } = useSelector(selectProject);
+  const projectList = useSelector(selectProjectList);
+  const isProjectLoading = useSelector(selectIsProjectLoading);
   const { open } = useProjectDrawer();
 
   useEffect(() => {
@@ -28,9 +30,6 @@ export const ProjectListScreen = () => {
 
   useEffect(() => {
     const resultAction = dispatch(getUserAsync());
-    // if(getUserAsync.fulfilled.match(resultAction)){
-    //   console.log('成功');
-    // }
     return () => {
       resultAction.abort();
     };
@@ -55,7 +54,11 @@ export const ProjectListScreen = () => {
           params={searchParams}
           setParams={setSearchParams}
         />
-        <List dataSource={projects} users={users} />
+        <List
+          dataSource={projectList}
+          users={users}
+          loading={isProjectLoading}
+        />
       </ContentContainer>
       <ProjectDrawer />
     </>

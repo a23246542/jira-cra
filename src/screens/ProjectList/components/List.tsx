@@ -16,7 +16,11 @@ interface ListProps extends TableProps<IProject> {
   users: Array<IUser>;
 }
 
-export const List = ({ users = [], dataSource = [] }: ListProps) => {
+export const List = ({
+  users = [],
+  dataSource = [],
+  ...restProps
+}: ListProps) => {
   const dispatch = useDispatch();
   const handlePinProject = (id: number) => (pin: boolean) => {
     dispatch(editProjectAsync({ id, pin }));
@@ -83,6 +87,7 @@ export const List = ({ users = [], dataSource = [] }: ListProps) => {
           },
         ]}
         pagination={false}
+        {...restProps}
       />
     </div>
   );

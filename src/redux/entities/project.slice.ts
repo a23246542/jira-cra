@@ -180,10 +180,14 @@ export const projectSlice = createSlice({
 
 export const projectActions = projectSlice.actions;
 
-export const selectProject = (state: RootState) => state.project;
-
 export const selectProjectList = (state: RootState) =>
   state.project.projects;
 
 export const selectCurrentProject = (state: RootState) =>
   state.project.currentProject;
+
+export const selectIsProjectLoading = (state: RootState) =>
+  state.project.state === FetchState.LOADING;
+
+export const selectIsMutateProjectLoading = (state: RootState) =>
+  state.project.state === FetchState.LOADING;

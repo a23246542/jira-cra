@@ -6,7 +6,7 @@ import {
   selectEditProjectState,
   selectProjectModalOpen,
 } from 'redux/projectListScreen.slice';
-import { selectProject } from 'redux/entities/project.slice';
+import { selectIsMutateProjectLoading } from 'redux/entities/project.slice';
 import { FetchState } from 'types';
 
 export const useProjectDrawer = () => {
@@ -14,7 +14,9 @@ export const useProjectDrawer = () => {
   const isOpen = useSelector(selectProjectModalOpen);
   const editingProject = useSelector(selectEditProject);
   const editingProjectState = useSelector(selectEditProjectState);
-  const { mutateState } = useSelector(selectProject);
+  const isMutateProjectLoading = useSelector(
+    selectIsMutateProjectLoading,
+  );
 
   const startEdit = useCallback(
     (id: number) => {
@@ -40,6 +42,6 @@ export const useProjectDrawer = () => {
     close,
     editingProject,
     isLoading: editingProjectState === FetchState.LOADING,
-    isMutateLoading: mutateState === FetchState.LOADING,
+    isMutateLoading: isMutateProjectLoading,
   };
 };

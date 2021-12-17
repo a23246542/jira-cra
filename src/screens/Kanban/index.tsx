@@ -12,7 +12,7 @@ import { useAppDispatch } from 'redux/store';
 import { ContentContainer } from 'components/UI';
 import {
   getProjectAsync,
-  selectProject,
+  selectCurrentProject,
 } from 'redux/entities/project.slice';
 import { KanbanColumn } from './components/KanbanColumn';
 import { useKanbanSearchParams } from './hooks/useKanbanSearchParams';
@@ -43,7 +43,7 @@ export const KanbanScreen = () => {
   const isKanbanFetchLoading = useSelector(selectKanbanFetchLoading);
   const isTaskFetchLoading = useSelector(selectTaskFetchLoading);
   const isKanbanInitLoading = useSelector(selectIsKanbanInitLoading);
-  const { currentProject } = useSelector(selectProject);
+  const currentProject = useSelector(selectCurrentProject);
   const { id: projectId } = useParams();
   const kanbanParams = useKanbanSearchParams();
   const [taskParams] = useTaskSearchParams();
