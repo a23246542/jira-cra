@@ -176,15 +176,25 @@ export const taskSlice = createSlice({
     },
     [addTaskAsync.pending.type]: (state, action) => {
       state.mutateState = FetchState.LOADING;
+      const { arg: newTaskInput } = action.meta;
+      state.preTasks = state.tasks;
+      state.tasks.push(newTaskInput);
       state.error = null;
     },
     [addTaskAsync.fulfilled.type]: (state, action) => {
       state.mutateState = FetchState.SUCCESS;
-      state.tasks.push(action.payload);
+      // state.tasks.push(action.payload);
+      const targetIndex = state.tasks.findIndex(
+        (task) => task.id === action.payload.id,
+      );
+      state.tasks.splice(targetIndex, 1, action.payload);
+      state.preTasks = [];
       state.error = null;
     },
     [addTaskAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
+      state.tasks = state.preTasks;
+      state.preTasks = [];
       if (action.payload) {
         state.error = action.payload;
       } else {

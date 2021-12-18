@@ -105,24 +105,32 @@ export const kanbanSlice = createSlice({
       }
     },
     [addKanbanAsync.pending.type]: (state, action) => {
-      const newKanbanList = [...state.kanbans, action.meta.arg];
+      const { arg: newKanbanInput }: { arg: CreateKanbanInput } =
+        action.meta;
+      // const newKanbanList = [...state.kanbans, newKanbanInput];
       state.preKanbans = state.kanbans;
-      state.kanbans = newKanbanList;
+      state.kanbans.push(newKanbanInput);
+      // state.kanbans = newKanbanList;
       state.mutateState = FetchState.LOADING;
       state.error = null;
     },
     [addKanbanAsync.fulfilled.type]: (state, action) => {
       state.mutateState = FetchState.SUCCESS;
-      const targeIndex = state.kanbans.findIndex(
-        (kanban) => kanban.id === action.payload.id,
+      // const targeIndex = state.kanbans.findIndex(
+      //   (kanban) => kanban.name === action.payload.name,
+      // );
+      state.kanbans.splice(
+        state.kanbans.length - 1,
+        1,
+        action.payload,
       );
-      state.kanbans.splice(targeIndex, 1, action.payload);
       state.preKanbans = [];
       state.error = null;
     },
     [addKanbanAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
-      state.kanbans = state.preKanbans;
+      // state.kanbans = state.preKanbans; //失效
+      state.kanbans.pop();
       state.preKanbans = [];
       if (action.payload) {
         state.error = action.payload;
@@ -132,22 +140,27 @@ export const kanbanSlice = createSlice({
     },
     [deleteKanbanAsync.pending.type]: (state, action) => {
       state.mutateState = FetchState.LOADING;
-      state.preKanbans = state.kanbans;
-      const targetIndex = state.kanbans.findIndex(
-        (kanban) => kanban.id === action.meta.arg,
-      );
-      state.kanbans.splice(targetIndex, 1);
+      // state.preKanbans = state.kanbans;
+      // const targetIndex = state.kanbans.findIndex(
+      //   (kanban) => kanban.id === action.meta.arg,
+      // );
+      // state.kanbans.splice(targetIndex, 1);
       state.error = null;
     },
     [deleteKanbanAsync.fulfilled.type]: (state, action) => {
       state.mutateState = FetchState.SUCCESS;
+      const { arg: id } = action.meta;
+      const targetIndex = state.kanbans.findIndex(
+        (kanban) => kanban.id === id,
+      );
+      state.kanbans.splice(targetIndex, 1);
       state.preKanbans = [];
       state.error = null;
     },
     [deleteKanbanAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
-      state.kanbans = state.preKanbans;
-      state.preKanbans = [];
+      // state.kanbans = state.preKanbans;
+      // state.preKanbans = [];
       if (action.payload) {
         state.error = action.payload;
       } else {

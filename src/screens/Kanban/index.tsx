@@ -87,14 +87,14 @@ export const KanbanScreen = () => {
                     <DropChild style={{ display: 'flex' }}>
                       {kanbans?.map((kanban, index) => (
                         <Drag
-                          key={kanban.id}
+                          key={kanban.id || `${index}_${kanban.name}`}
                           draggableId={`kanban_${kanban.id}`}
                           index={index}
                         >
                           <DragChild>
-                            {isKanbanType(kanban) && (
-                              <KanbanColumn kanban={kanban} />
-                            )}
+                            {/* {isKanbanType(kanban) && ( */}
+                            <KanbanColumn kanban={kanban} />
+                            {/* )} */}
                           </DragChild>
                         </Drag>
                       ))}

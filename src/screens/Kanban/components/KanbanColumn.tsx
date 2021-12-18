@@ -22,15 +22,16 @@ import {
   DragChild,
 } from 'components/DragDrop';
 import { TypeId } from 'types/sort';
+import { CreateKanbanInput } from 'api/kanbanReq';
 
 interface IKanbanColumn {
-  kanban: IKanban;
+  kanban: IKanban | CreateKanbanInput;
 }
 
 export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
   // const [taskParams] = useTaskSearchParams();
   // const dispatch = useAppDispatch();
-  const tasks = useSelector(selectTasksByKanbanId(kanban.id));
+  const tasks = useSelector(selectTasksByKanbanId(kanban?.id || 0));
 
   // useEffect(() => {
   //   dispatch(getTasksAsync(taskParams));
@@ -67,13 +68,17 @@ export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
             })}
           </DropChild>
         </Drop>
-        <CreateTask kanbanId={kanban.id} />
+        <CreateTask kanbanId={kanban?.id || 0} />
       </TasksContainer>
     </KanbanContainer>
   );
 };
 
-const More = ({ kanban }: { kanban: IKanban }) => {
+const More = ({
+  kanban,
+}: {
+  kanban: IKanban | CreateKanbanInput;
+}) => {
   const dispatch = useAppDispatch();
 
   const handleDeleteBtnClick = () => {
@@ -82,7 +87,7 @@ const More = ({ kanban }: { kanban: IKanban }) => {
       okText: '確定',
       cancelText: '取消',
       onOk() {
-        return dispatch(deleteKanbanAsync(kanban.id));
+        return dispatch(deleteKanbanAsync(kanban?.id || 0));
       },
     });
   };

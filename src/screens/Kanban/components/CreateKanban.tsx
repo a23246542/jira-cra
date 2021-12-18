@@ -21,9 +21,14 @@ export const CreateKanban = () => {
     }
     dispatch(addKanbanAsync({ projectId, name }))
       .unwrap()
-      .then(() => {
-        setName('');
+      // .then(() => {
+      //   setName('');
+      // });
+      .catch(() => {
+        console.log('xxx');
+        setName(name);
       });
+    setName('');
   };
 
   return (
