@@ -7,10 +7,7 @@ import {
   getTasksAsync,
   selectTasksByKanbanId,
 } from 'redux/entities/task.slice';
-import {
-  deleteKanbanActionAsync,
-  deleteKanbanAsync,
-} from 'redux/entities/kanban.slice';
+import { deleteKanbanAsync } from 'redux/entities/kanban.slice';
 import { useAppDispatch } from 'redux/store';
 import { IKanban } from 'types/kanban';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
@@ -85,7 +82,7 @@ const More = ({ kanban }: { kanban: IKanban }) => {
       okText: '確定',
       cancelText: '取消',
       onOk() {
-        return dispatch(deleteKanbanActionAsync(kanban.id));
+        return dispatch(deleteKanbanAsync(kanban.id));
       },
     });
   };

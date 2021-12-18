@@ -22,6 +22,7 @@ interface TaskSliceState {
   preTasks: Array<ITask>;
   state: FetchState;
   mutateState: FetchState;
+  deleteState: FetchState;
   currentTaskState: FetchState;
   taskProjectId: number | null;
   fetchingTasksProjectId: number | null;
@@ -34,6 +35,7 @@ const initialState: TaskSliceState = {
   preTasks: [],
   state: FetchState.IDLE,
   mutateState: FetchState.IDLE,
+  deleteState: FetchState.IDLE,
   currentTaskState: FetchState.IDLE,
   taskProjectId: null,
   fetchingTasksProjectId: null,
@@ -97,11 +99,14 @@ export const deleteTaskAsync = createAsyncThunk(
   'task/deleteTaskAsync',
   async (id: number, { dispatch, getState }) => {
     const res = await taskApi.deleteTask(id);
-    const { project } = getState() as RootState;
-    if (!project.currentProject) return;
-    if (res.data.success) {
-      const projectId = project.currentProject.id;
-      dispatch(getTasksAsync({ projectId }));
+    // const { project } = getState() as RootState;
+    // if (!project.currentProject) return;
+    // if (res.data.success) {
+    //   const projectId = project.currentProject.id;
+    //   dispatch(getTasksAsync({ projectId }));
+    // }
+    if (!res.data.success) {
+      return Promise.reject('伺服器存取錯誤');
     }
     return res.data;
   },
@@ -208,15 +213,29 @@ export const taskSlice = createSlice({
       }
     },
     [deleteTaskAsync.pending.type]: (state, action) => {
-      state.mutateState = FetchState.LOADING;
+      state.deleteState = FetchState.LOADING;
+      // state.preTasks = state.tasks;
+      // const { arg: id } = action.meta;
+      // const targetIndex = state.tasks.findIndex(
+      //   (task) => task.id === id,
+      // );
+      // state.tasks.splice(targetIndex, 1);
       state.error = null;
     },
     [deleteTaskAsync.fulfilled.type]: (state, action) => {
-      state.mutateState = FetchState.SUCCESS;
+      state.deleteState = FetchState.SUCCESS;
+      // state.preTasks = [];
+      const { arg: id } = action.meta;
+      const targetIndex = state.tasks.findIndex(
+        (task) => task.id === id,
+      );
+      state.tasks.splice(targetIndex, 1);
       state.error = null;
     },
     [deleteTaskAsync.rejected.type]: (state, action) => {
-      state.mutateState = FetchState.FAILED;
+      state.deleteState = FetchState.FAILED;
+      // state.tasks = state.preTasks;
+      // state.preTasks = [];
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -279,13 +298,11 @@ export const selectTaskFetchLoading = (state: RootState) =>
 export const selectTaskMutateState = (state: RootState) =>
   state.task.mutateState;
 
+export const selectTaskDeleteState = (state: RootState) =>
+  state.task.deleteState;
+
 export const selectTasksByKanbanId =
   (id: number) => (state: RootState) => {
-    // console.log(
-    //   '重新計算',
-    //   state.task.tasks.filter((item) => item.kanbanId === id),
-    // );
-
     return state.task.tasks.filter((item) => item.kanbanId === id);
   };
 

@@ -2,7 +2,6 @@ import { Input, Spin } from 'antd';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  addKanbanActionAsync,
   addKanbanAsync,
   selectMutateLoading,
 } from 'redux/entities/kanban.slice';
@@ -20,9 +19,11 @@ export const CreateKanban = () => {
     if (!name || !projectId) {
       return;
     }
-    dispatch(addKanbanActionAsync({ projectId, name })).then(() => {
-      setName('');
-    });
+    dispatch(addKanbanAsync({ projectId, name }))
+      .unwrap()
+      .then(() => {
+        setName('');
+      });
   };
 
   return (

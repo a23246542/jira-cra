@@ -43,11 +43,6 @@ export const addKanbanAsync = createAsyncThunk(
   'kanban/addKanbanAsync',
   async (params: CreateKanbanInput, { dispatch, getState }) => {
     const res = await kanbanApi.createKanban(params);
-    // const {kanban} = getState() as RootState
-    // dispatch(setPreKanbanList(kanban.kanbans))
-    // const newKanbanList = [...kanban.kanbans,{...params}]
-    // //@ts-ignore
-    // setKanbanList(newKanbanList)
     return res.data;
   },
 );
@@ -55,33 +50,11 @@ export const addKanbanAsync = createAsyncThunk(
 export const deleteKanbanAsync = createAsyncThunk(
   'kanban/deleteKanban',
   async (id: number, { dispatch, getState }) => {
-    console.log('id', id);
-
     const res = await kanbanApi.deleteKanban(id);
-    console.log('res', res);
+    if (!res.data.success) {
+      return Promise.reject('伺服器存取錯誤');
+    }
     return res.data;
-
-    // if (!res.data.success) {
-    //   return Promise.reject();
-    // }
-
-    // return res.data;
-    // const { project } = getState() as RootState;
-    // if (!project.currentProject) return;
-    // if (res.data.success) {
-    //   dispatch(
-    //     getKanbansAsync({
-    //       projectId: project.currentProject.id,
-    //     }),
-    //   );
-    // }
-  },
-  {
-    getPendingMeta({ arg: kanbanId }) {
-      return {
-        kanbanId,
-      };
-    },
   },
 );
 
@@ -132,7 +105,6 @@ export const kanbanSlice = createSlice({
       }
     },
     [addKanbanAsync.pending.type]: (state, action) => {
-      console.log('pending action', action);
       const newKanbanList = [...state.kanbans, action.meta.arg];
       state.preKanbans = state.kanbans;
       state.kanbans = newKanbanList;
@@ -141,37 +113,10 @@ export const kanbanSlice = createSlice({
     },
     [addKanbanAsync.fulfilled.type]: (state, action) => {
       state.mutateState = FetchState.SUCCESS;
-      // state.kanbans.push(action.payload);
-      console.log(
-        'action',
-        action,
-        state.kanbans.map((kanban) => {
-          if (kanban.id === action.payload.id) {
-            return action.payload;
-          }
-          return kanban;
-        }),
-      );
-
       const targeIndex = state.kanbans.findIndex(
         (kanban) => kanban.id === action.payload.id,
       );
       state.kanbans.splice(targeIndex, 1, action.payload);
-
-      // state.kanbans = state.kanbans.map((kanban) => {
-      //   if (kanban.id === action.payload.id) {
-      //     return action.payload;
-      //   }
-      //   return kanban;
-      // });
-
-      // const newKanbanList = state.kanbans.map((kanban) => {
-      //   if (kanban.id === action.payload.id) {
-      //     return action.payload;
-      //   }
-      //   return kanban;
-      // });
-      // state.kanbans = newKanbanList;
       state.preKanbans = [];
       state.error = null;
     },
@@ -187,10 +132,11 @@ export const kanbanSlice = createSlice({
     },
     [deleteKanbanAsync.pending.type]: (state, action) => {
       state.mutateState = FetchState.LOADING;
-      // state.preKanbans = state.kanbans;
-      // state.kanbans = state.kanbans.filter(
-      //   (kanban) => kanban.id !== action.meata.kanbanId,
-      // );
+      state.preKanbans = state.kanbans;
+      const targetIndex = state.kanbans.findIndex(
+        (kanban) => kanban.id === action.meta.arg,
+      );
+      state.kanbans.splice(targetIndex, 1);
       state.error = null;
     },
     [deleteKanbanAsync.fulfilled.type]: (state, action) => {
@@ -232,28 +178,6 @@ export const kanbanSlice = createSlice({
 export const { setKanbanList, setPreKanbanList } =
   kanbanSlice.actions;
 
-export const addKanbanActionAsync =
-  (params: CreateKanbanInput) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    // const kanban = getState().kanban;
-    dispatch(addKanbanAsync(params));
-    // const newKanbanList = [...kanban.kanbans, { ...params }];
-    // dispatch(setPreKanbanList(kanban.kanbans));
-    // dispatch(setKanbanList(newKanbanList));
-  };
-
-export const deleteKanbanActionAsync =
-  (id: number) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const kanban = getState().kanban;
-    dispatch(deleteKanbanAsync(id));
-    dispatch(setPreKanbanList(kanban.kanbans));
-    const newKanbanList = kanban.kanbans.filter(
-      (item) => item.id !== id,
-    );
-    dispatch(setKanbanList(newKanbanList));
-  };
-
 export const reorderKanbanActionAsync =
   (params: KanbanSortProps) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -267,7 +191,6 @@ export const reorderKanbanActionAsync =
     dispatch(reorderKanbanAsync(params));
   };
 export const selectKanbans = (state: RootState) =>
-  // state.kanban.kanbans.filter((kanban) => !!kanban.id) as IKanban[];
   state.kanban.kanbans;
 
 export const selectKanbanFetchLoading = (state: RootState) =>
