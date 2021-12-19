@@ -14,10 +14,10 @@ export const reorder = ({
   list: { id: number }[];
   fromId: number;
   type: 'after' | 'before';
-  referenceId: number;
+  referenceId?: number;
 }) => {
   const copiedList = [...list];
-  // 找到fromId對應項目的下標
+  // 找到fromId對應項目的索引
   const movingItemIndex = copiedList.findIndex(
     (item) => item.id === fromId,
   );

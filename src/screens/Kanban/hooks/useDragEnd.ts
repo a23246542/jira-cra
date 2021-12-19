@@ -82,6 +82,7 @@ export const useDragEnd = () => {
         // const toTask = allTasks.filter((task) => task.kanbanId === toKanbanId)[
         //   destination.index
         // ];
+        // console.log('useDragEnd', fromTask, toTask);
 
         if (fromTask?.id === toTask?.id) {
           return;
@@ -90,12 +91,11 @@ export const useDragEnd = () => {
         const sortType =
           (fromKanbanId === toKanbanId &&
             destination.index > source.index) ||
-          (destination.index === toKanbanTasks.length &&
-            destination.index > source.index)
+          destination.index === toKanbanTasks.length
             ? 'after'
             : 'before';
 
-        if (!fromTask.id || !toTask.id) {
+        if (!fromTask?.id) {
           return;
         }
         dispatch(
