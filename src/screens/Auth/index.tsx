@@ -11,11 +11,13 @@ import {
   switchRegisterAction,
 } from 'redux/authScreen.slice';
 import { useAppDispatch } from 'redux/store';
+import { useDocumentTitle } from 'hooks/useDocumentTitle';
 
 export const AuthScreen = () => {
   const isRegister = useSelector(selectIsRegister);
   const authError = useSelector(selectUserError);
   const unAuthError = useSelector(selectUnAuthError);
+  useDocumentTitle('Jira任務管理系統');
   const dispatch = useAppDispatch();
   const error = authError || unAuthError;
   return (

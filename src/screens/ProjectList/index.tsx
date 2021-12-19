@@ -14,11 +14,13 @@ import { Row, ButtonNoPadding } from 'components/UI';
 import { useProjectDrawer } from './hooks/useProjectDrawer';
 import { useAppDispatch } from 'redux/store';
 import { useDebounce } from 'hooks/useDebounce';
+import { useDocumentTitle } from 'hooks/useDocumentTitle';
 
 export const ProjectListScreen = () => {
   const [searchParams, setSearchParams] = useProjectSearchParams();
   const debounceProjectParams = useDebounce(searchParams);
   const dispatch = useAppDispatch();
+  useDocumentTitle('專案列表');
   const users = useSelector(selectUsers);
   const projectList = useSelector(selectProjectList);
   const isProjectLoading = useSelector(selectIsProjectLoading);

@@ -37,6 +37,7 @@ import { useTaskSearchParams } from './hooks/useTaskSearchParams';
 import { useDebounce } from 'hooks/useDebounce';
 import { selectIsKanbanInitLoading } from 'redux/kanbanScreen.slice';
 import { IKanban } from 'types/kanban';
+import { useDocumentTitle } from 'hooks/useDocumentTitle';
 
 export const KanbanScreen = () => {
   const dispatch = useAppDispatch();
@@ -45,6 +46,7 @@ export const KanbanScreen = () => {
   const isTaskFetchLoading = useSelector(selectTaskFetchLoading);
   const isKanbanInitLoading = useSelector(selectIsKanbanInitLoading);
   const currentProject = useSelector(selectCurrentProject);
+  useDocumentTitle('看板列表', true);
   const { id: projectId } = useParams();
   const kanbanParams = useKanbanSearchParams();
   const [taskParams] = useTaskSearchParams();

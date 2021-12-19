@@ -5,6 +5,7 @@ import { authApi } from 'api/authReq';
 import { getToken } from 'api/instance';
 
 import { FetchState, AuthForm } from 'types/common';
+import { showLogin } from 'redux/authScreen.slice';
 
 interface AuthSliceState {
   user: IUser | null;
@@ -109,6 +110,7 @@ export const { setUser, clearAuthError } = authSlice.actions;
 export const logoutAction = () => (dispatch: AppDispatch) =>
   authApi.logout().then(() => {
     dispatch(setUser(null));
+    dispatch(showLogin());
   });
 
 export const selectUser = (state: RootState) => state.auth.user;
