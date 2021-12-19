@@ -23,7 +23,7 @@ export type GetTaskListInput = Partial<ITask> &
   Pick<ITask, 'projectId'>;
 
 export type CreateTaskInput = Partial<ITask> &
-  Pick<ITask, 'projectId' | 'kanbanId' | 'name'>;
+  Pick<ITask, 'projectId' | 'kanbanId' | 'name' | 'typeId'>;
 
 export type UpdateTaskInput = Partial<ITask> & Pick<ITask, 'id'>;
 

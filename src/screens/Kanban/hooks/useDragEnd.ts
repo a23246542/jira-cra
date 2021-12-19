@@ -95,6 +95,9 @@ export const useDragEnd = () => {
             ? 'after'
             : 'before';
 
+        if (!fromTask.id || !toTask.id) {
+          return;
+        }
         dispatch(
           reorderTaskActionAsync({
             fromKanbanId,

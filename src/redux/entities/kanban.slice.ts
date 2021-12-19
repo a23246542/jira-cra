@@ -107,18 +107,12 @@ export const kanbanSlice = createSlice({
     [addKanbanAsync.pending.type]: (state, action) => {
       const { arg: newKanbanInput }: { arg: CreateKanbanInput } =
         action.meta;
-      // const newKanbanList = [...state.kanbans, newKanbanInput];
-      state.preKanbans = state.kanbans;
       state.kanbans.push(newKanbanInput);
-      // state.kanbans = newKanbanList;
       state.mutateState = FetchState.LOADING;
       state.error = null;
     },
     [addKanbanAsync.fulfilled.type]: (state, action) => {
       state.mutateState = FetchState.SUCCESS;
-      // const targeIndex = state.kanbans.findIndex(
-      //   (kanban) => kanban.name === action.payload.name,
-      // );
       state.kanbans.splice(
         state.kanbans.length - 1,
         1,
@@ -131,7 +125,7 @@ export const kanbanSlice = createSlice({
       state.mutateState = FetchState.FAILED;
       // state.kanbans = state.preKanbans; //失效
       state.kanbans.pop();
-      state.preKanbans = [];
+      // state.preKanbans = [];
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -140,11 +134,6 @@ export const kanbanSlice = createSlice({
     },
     [deleteKanbanAsync.pending.type]: (state, action) => {
       state.mutateState = FetchState.LOADING;
-      // state.preKanbans = state.kanbans;
-      // const targetIndex = state.kanbans.findIndex(
-      //   (kanban) => kanban.id === action.meta.arg,
-      // );
-      // state.kanbans.splice(targetIndex, 1);
       state.error = null;
     },
     [deleteKanbanAsync.fulfilled.type]: (state, action) => {
@@ -154,13 +143,10 @@ export const kanbanSlice = createSlice({
         (kanban) => kanban.id === id,
       );
       state.kanbans.splice(targetIndex, 1);
-      state.preKanbans = [];
       state.error = null;
     },
     [deleteKanbanAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
-      // state.kanbans = state.preKanbans;
-      // state.preKanbans = [];
       if (action.payload) {
         state.error = action.payload;
       } else {

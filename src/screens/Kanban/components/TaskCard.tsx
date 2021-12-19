@@ -5,9 +5,10 @@ import { TaskTypeIcon } from './TaskTypeIcon';
 import { MarkWord } from 'components/MarkWord';
 import { useTaskSearchParams } from '../hooks/useTaskSearchParams';
 import styled from '@emotion/styled';
+import { CreateTaskInput } from 'api/taskReq';
 
 interface ITaskCard {
-  task: ITask;
+  task: ITask | CreateTaskInput;
 }
 
 export const TaskCard = ({ task }: ITaskCard) => {
@@ -15,11 +16,15 @@ export const TaskCard = ({ task }: ITaskCard) => {
   const [{ name: keyword }] = useTaskSearchParams();
 
   const handleTaskCardClick = () => {
+    if (!task.id) return;
     startEditTask(task.id);
   };
 
   return (
-    <StyleCard key={task.id} onClick={handleTaskCardClick}>
+    <StyleCard
+      key={task.id || `${task.kanbanId}_${task.name}`}
+      onClick={handleTaskCardClick}
+    >
       <div>
         <Typography.Text ellipsis>
           <MarkWord name={task.name} keyword={keyword} />

@@ -23,12 +23,8 @@ export const CreateTask = ({ kanbanId }: ICreateTask) => {
     if (!name) {
       return;
     }
-    dispatch(addTaskAsync({ projectId, kanbanId, name }))
+    dispatch(addTaskAsync({ projectId, kanbanId, name, typeId: 1 }))
       .unwrap()
-      // .then(() => {
-      //   setInputMode(false);
-      //   setName('');
-      // });
       .catch(() => {
         setInputMode(true);
         setName(name);

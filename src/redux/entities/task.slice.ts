@@ -17,9 +17,9 @@ import { TaskSortProps } from 'types/sort';
 import { reorder } from 'utils/reorder';
 
 interface TaskSliceState {
-  tasks: Array<ITask>;
+  tasks: Array<ITask | CreateTaskInput>;
   currentTask: ITask | null;
-  preTasks: Array<ITask>;
+  preTasks: Array<ITask | CreateTaskInput>;
   state: FetchState;
   mutateState: FetchState;
   deleteState: FetchState;
@@ -99,12 +99,6 @@ export const deleteTaskAsync = createAsyncThunk(
   'task/deleteTaskAsync',
   async (id: number, { dispatch, getState }) => {
     const res = await taskApi.deleteTask(id);
-    // const { project } = getState() as RootState;
-    // if (!project.currentProject) return;
-    // if (res.data.success) {
-    //   const projectId = project.currentProject.id;
-    //   dispatch(getTasksAsync({ projectId }));
-    // }
     if (!res.data.success) {
       return Promise.reject('伺服器存取錯誤');
     }
@@ -176,25 +170,19 @@ export const taskSlice = createSlice({
     },
     [addTaskAsync.pending.type]: (state, action) => {
       state.mutateState = FetchState.LOADING;
-      const { arg: newTaskInput } = action.meta;
-      state.preTasks = state.tasks;
+      const { arg: newTaskInput }: { arg: CreateTaskInput } =
+        action.meta;
       state.tasks.push(newTaskInput);
       state.error = null;
     },
     [addTaskAsync.fulfilled.type]: (state, action) => {
       state.mutateState = FetchState.SUCCESS;
-      // state.tasks.push(action.payload);
-      const targetIndex = state.tasks.findIndex(
-        (task) => task.id === action.payload.id,
-      );
-      state.tasks.splice(targetIndex, 1, action.payload);
-      state.preTasks = [];
+      state.tasks.splice(state.tasks.length - 1, 1, action.payload);
       state.error = null;
     },
     [addTaskAsync.rejected.type]: (state, action) => {
       state.mutateState = FetchState.FAILED;
-      state.tasks = state.preTasks;
-      state.preTasks = [];
+      state.tasks.pop();
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -224,17 +212,10 @@ export const taskSlice = createSlice({
     },
     [deleteTaskAsync.pending.type]: (state, action) => {
       state.deleteState = FetchState.LOADING;
-      // state.preTasks = state.tasks;
-      // const { arg: id } = action.meta;
-      // const targetIndex = state.tasks.findIndex(
-      //   (task) => task.id === id,
-      // );
-      // state.tasks.splice(targetIndex, 1);
       state.error = null;
     },
     [deleteTaskAsync.fulfilled.type]: (state, action) => {
       state.deleteState = FetchState.SUCCESS;
-      // state.preTasks = [];
       const { arg: id } = action.meta;
       const targetIndex = state.tasks.findIndex(
         (task) => task.id === id,
@@ -244,8 +225,6 @@ export const taskSlice = createSlice({
     },
     [deleteTaskAsync.rejected.type]: (state, action) => {
       state.deleteState = FetchState.FAILED;
-      // state.tasks = state.preTasks;
-      // state.preTasks = [];
       if (action.payload) {
         state.error = action.payload;
       } else {
@@ -279,7 +258,7 @@ export const { setTaskList, setPreTaskList } = taskSlice.actions;
 export const reorderTaskActionAsync =
   (params: TaskSortProps) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const oldList = getState().task.tasks;
+    const oldList = getState().task.tasks as Array<ITask>;
     const orderedList = reorder({
       list: oldList,
       ...params,
