@@ -17,7 +17,7 @@ import {
 } from 'redux/entities/epic.slice';
 import { IEpic } from 'types/epic';
 import {
-  getTasksAsync,
+  getTaskListAsync,
   selectTasks,
 } from 'redux/entities/task.slice';
 import { Link } from 'react-router-dom';
@@ -41,7 +41,7 @@ export const EpicScreen = () => {
   }, [projectId, dispatch]);
 
   useEffect(() => {
-    dispatch(getTasksAsync({ projectId }));
+    dispatch(getTaskListAsync({ projectId }));
   }, [projectId, dispatch]);
 
   const handleCreateBtnClick = () => {

@@ -17,8 +17,8 @@ const initialState: TaskTypeSliceState = {
   error: null,
 };
 
-export const getTaskTypesAsync = createAsyncThunk(
-  'taskType/getTaskTypesAsync',
+export const getTaskTypeListAsync = createAsyncThunk(
+  'taskType/getTaskTypeListAsync',
   async () => {
     const res = await taskTypeApi.getTaskTypes();
     return res.data;
@@ -44,11 +44,11 @@ export const taskTypeSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [getTaskTypesAsync.pending.type]: (state, action) => {
+    [getTaskTypeListAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
       state.error = null;
     },
-    [getTaskTypesAsync.fulfilled.type]: (state, action) => {
+    [getTaskTypeListAsync.fulfilled.type]: (state, action) => {
       state.state = FetchState.SUCCESS;
       if (!Array.isArray(action.payload)) {
         console.error('taskTypes payload 錯誤');
@@ -56,7 +56,7 @@ export const taskTypeSlice = createSlice({
       state.taskTypes = action.payload;
       state.error = null;
     },
-    [getTaskTypesAsync.rejected.type]: (state, action) => {
+    [getTaskTypeListAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       state.taskTypes = [];
       if (action.payload) {

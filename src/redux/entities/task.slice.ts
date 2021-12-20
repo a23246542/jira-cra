@@ -42,8 +42,8 @@ const initialState: TaskSliceState = {
   error: null,
 };
 
-export const getTasksAsync = createAsyncThunk(
-  'task/getTasksAsync',
+export const getTaskListAsync = createAsyncThunk(
+  'task/getTaskListAsync',
   async (params: GetTaskListInput, thunkAPI) => {
     const res = await taskApi.getTasks(params);
     return res.data;
@@ -125,12 +125,12 @@ export const taskSlice = createSlice({
     },
   },
   extraReducers: {
-    [getTasksAsync.pending.type]: (state, action) => {
+    [getTaskListAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
       state.fetchingTasksProjectId = action.meta.projectId;
       state.error = null;
     },
-    [getTasksAsync.fulfilled.type]: (state, action) => {
+    [getTaskListAsync.fulfilled.type]: (state, action) => {
       state.state = FetchState.SUCCESS;
       if (!Array.isArray(action.payload)) {
         console.error('tasks payload 錯誤');
@@ -139,7 +139,7 @@ export const taskSlice = createSlice({
       state.error = null;
       state.fetchingTasksProjectId = null;
     },
-    [getTasksAsync.rejected.type]: (state, action) => {
+    [getTaskListAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       // state.tasks = [];
       state.fetchingTasksProjectId = null;

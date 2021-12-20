@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Badge, Button, Dropdown, Menu, Modal } from 'antd';
 import { useSelector } from 'react-redux';
 import {
-  getTasksAsync,
+  getTaskListAsync,
   selectTasksByKanbanId,
 } from 'redux/entities/task.slice';
 import { deleteKanbanAsync } from 'redux/entities/kanban.slice';
@@ -34,7 +34,7 @@ export const KanbanColumn = ({ kanban }: IKanbanColumn) => {
   const tasks = useSelector(selectTasksByKanbanId(kanban?.id || 0));
 
   // useEffect(() => {
-  //   dispatch(getTasksAsync(taskParams));
+  //   dispatch(getTaskListAsync(taskParams));
   // }, [taskParams, dispatch]);
 
   return (

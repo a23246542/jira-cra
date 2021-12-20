@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  getTaskTypesAsync,
+  getTaskTypeListAsync,
   selectTaskTypes,
 } from 'redux/entities/taskType.slice';
 import { useAppDispatch } from 'redux/store';
@@ -14,7 +14,7 @@ export const TaskTypeSelect = (props: ITaskType) => {
   const taskTypes = useSelector(selectTaskTypes);
 
   useEffect(() => {
-    dispatch(getTaskTypesAsync());
+    dispatch(getTaskTypeListAsync());
   }, [dispatch]);
   return <IdSelect options={taskTypes} {...props} />;
 };

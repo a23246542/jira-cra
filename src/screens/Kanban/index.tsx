@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { DragDropContext } from 'react-beautiful-dnd';
 import {
-  getKanbansAsync,
+  getKanbanListAsync,
   selectKanbanFetchLoading,
   selectKanbans,
 } from 'redux/entities/kanban.slice';
@@ -22,7 +22,7 @@ import { TaskModal } from './components/TaskModal';
 import { FetchState } from 'types';
 import { Spin } from 'antd';
 import {
-  getTasksAsync,
+  getTaskListAsync,
   selectTaskFetchLoading,
 } from 'redux/entities/task.slice';
 import {
@@ -57,11 +57,11 @@ export const KanbanScreen = () => {
   }, [projectId, dispatch]);
 
   useEffect(() => {
-    dispatch(getKanbansAsync(kanbanParams));
+    dispatch(getKanbanListAsync(kanbanParams));
   }, [kanbanParams, dispatch]);
 
   useEffect(() => {
-    dispatch(getTasksAsync(debounceTaskParams));
+    dispatch(getTaskListAsync(debounceTaskParams));
   }, [debounceTaskParams, dispatch]);
 
   const isKanbanLoading = isKanbanFetchLoading || isTaskFetchLoading;

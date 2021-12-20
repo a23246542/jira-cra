@@ -8,7 +8,10 @@ import {
   selectIsProjectLoading,
   selectProjectList,
 } from 'redux/entities/project.slice';
-import { getUserAsync, selectUsers } from 'redux/entities/user.slice';
+import {
+  getUserListAsync,
+  selectUsers,
+} from 'redux/entities/user.slice';
 import { ProjectDrawer } from './components';
 import { Row, ButtonNoPadding } from 'components/UI';
 import { useProjectDrawer } from './hooks/useProjectDrawer';
@@ -31,7 +34,7 @@ export const ProjectListScreen = () => {
   }, [debounceProjectParams, dispatch]);
 
   useEffect(() => {
-    const resultAction = dispatch(getUserAsync());
+    const resultAction = dispatch(getUserListAsync());
     return () => {
       resultAction.abort();
     };

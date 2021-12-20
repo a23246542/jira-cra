@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  getTaskTypesAsync,
+  getTaskTypeListAsync,
   selectTaskTypes,
 } from 'redux/entities/taskType.slice';
 import { useAppDispatch } from 'redux/store';
@@ -23,7 +23,7 @@ export const TaskTypeIcon = ({ typeId }: ITaskTypeIcon) => {
   const svgIcon = name === 'task' ? taskIcon : bugIcon;
 
   useEffect(() => {
-    dispatch(getTaskTypesAsync());
+    dispatch(getTaskTypeListAsync());
   }, [dispatch]);
 
   if (!name) {

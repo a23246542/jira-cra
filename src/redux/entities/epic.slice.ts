@@ -24,7 +24,7 @@ const initialState: EpicSliceState = {
 };
 
 export const getEpicListAsync = createAsyncThunk(
-  'epic/getEpicsAsync',
+  'epic/getEpicListAsync',
   async (params: GetEpicListInput, thunkAPI) => {
     const res = await epicApi.getEpics(params);
     return res.data;

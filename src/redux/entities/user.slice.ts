@@ -23,10 +23,10 @@ const initialState: UserSliceState = {
   error: null,
 };
 
-export const getUserAsync = createAsyncThunk(
-  'project/getUserAsync',
+export const getUserListAsync = createAsyncThunk(
+  'project/getUserListAsync',
   async (params: Partial<IUser> | undefined, thunkAPI) => {
-    const res = await userApi.getUserData(params);
+    const res = await userApi.getUsers(params);
     return res.data;
   },
   {
@@ -50,10 +50,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    [getUserAsync.pending.type]: (state, action) => {
+    [getUserListAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
     },
-    [getUserAsync.fulfilled.type]: (state, action) => {
+    [getUserListAsync.fulfilled.type]: (state, action) => {
       state.state = FetchState.SUCCESS;
       if (!Array.isArray(action.payload)) {
         console.error('user payload 錯誤');
@@ -61,7 +61,7 @@ export const userSlice = createSlice({
       state.users = action.payload;
       state.error = null;
     },
-    [getUserAsync.rejected.type]: (state, action) => {
+    [getUserListAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       state.users = [];
       // state.error = action.error;

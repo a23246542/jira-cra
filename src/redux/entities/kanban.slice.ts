@@ -31,8 +31,8 @@ const initialState: KanbanSliceState = {
   error: null,
 };
 
-export const getKanbansAsync = createAsyncThunk(
-  'kanban/getKanbansAsync',
+export const getKanbanListAsync = createAsyncThunk(
+  'kanban/getKanbanListAsync',
   async (params: GetKanbanListInput, thunkAPI) => {
     const res = await kanbanApi.getKanbans(params);
     return res.data;
@@ -83,11 +83,11 @@ export const kanbanSlice = createSlice({
     },
   },
   extraReducers: {
-    [getKanbansAsync.pending.type]: (state, action) => {
+    [getKanbanListAsync.pending.type]: (state, action) => {
       state.state = FetchState.LOADING;
       state.error = null;
     },
-    [getKanbansAsync.fulfilled.type]: (state, action) => {
+    [getKanbanListAsync.fulfilled.type]: (state, action) => {
       state.state = FetchState.SUCCESS;
       if (!Array.isArray(action.payload)) {
         console.error('kanbans payload 錯誤');
@@ -95,7 +95,7 @@ export const kanbanSlice = createSlice({
       state.kanbans = action.payload;
       state.error = null;
     },
-    [getKanbansAsync.rejected.type]: (state, action) => {
+    [getKanbanListAsync.rejected.type]: (state, action) => {
       state.state = FetchState.FAILED;
       // state.kanbans = [];
       if (action.payload) {
