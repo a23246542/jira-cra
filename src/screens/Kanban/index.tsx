@@ -19,7 +19,6 @@ import { useKanbanSearchParams } from './hooks/useKanbanSearchParams';
 import { SearchPanel } from './components/SearchPanel';
 import { CreateKanban } from './components/CreateKanban';
 import { TaskModal } from './components/TaskModal';
-import { FetchState } from 'types';
 import { Spin } from 'antd';
 import {
   getTaskListAsync,

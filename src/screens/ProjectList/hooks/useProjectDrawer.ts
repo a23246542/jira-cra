@@ -7,7 +7,7 @@ import {
   selectProjectModalOpen,
 } from 'redux/projectListScreen.slice';
 import { selectIsMutateProjectLoading } from 'redux/entities/project.slice';
-import { FetchState } from 'types';
+import { FetchState } from 'types/common';
 
 export const useProjectDrawer = () => {
   const dispatch = useDispatch();

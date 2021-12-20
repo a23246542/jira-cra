@@ -9,7 +9,8 @@ import {
 } from 'redux/entities/project.slice';
 import { useProjectDrawer } from '../hooks/useProjectDrawer';
 import { ButtonNoPadding } from 'components/UI';
-import { IProject, IUser } from 'types';
+import { IUser } from 'types/user';
+import { IProject } from 'types/project';
 import { useAppDispatch } from 'redux/store';
 
 interface ListProps extends TableProps<IProject> {

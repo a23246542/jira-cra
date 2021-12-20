@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { FetchState } from 'types';
+import { FetchState } from 'types/common';
 import { RootState } from './store';
 
 interface kanbanScreenSliceState {}

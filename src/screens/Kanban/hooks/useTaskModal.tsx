@@ -9,7 +9,7 @@ import {
   selectTaskDeleteState,
   selectTaskMutateState,
 } from 'redux/entities/task.slice';
-import { FetchState } from 'types';
+import { FetchState } from 'types/common';
 
 export const useTaskModal = () => {
   const [{ editingTaskId }, setParams] = useUrlQueryParams([

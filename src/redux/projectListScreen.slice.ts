@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { projectApi } from 'api/projectReq';
-import { FetchState, IProject } from 'types';
 import { RootState } from './store';
+import { FetchState } from 'types/common';
+import { IProject } from 'types/project';
 
 interface ProjectListScreenSliceState {
   editingProject: IProject | null;

@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { projectApi } from 'api/projectReq';
 
-import { IProject, FetchState } from 'types';
+import { FetchState } from 'types/common';
+import { IProject } from 'types/project';
 import { RootState } from 'redux/store';
 import {
   createProjectInput,
