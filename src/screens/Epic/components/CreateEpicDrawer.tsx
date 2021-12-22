@@ -61,7 +61,10 @@ export const CreateEpicDrawer = ({
             name="name"
             rules={[{ required: true, message: '請輸入任務組名稱' }]}
           >
-            <Input placeholder="請輸入任務組名稱" />
+            <Input
+              placeholder="請輸入任務組名稱"
+              autoComplete="off"
+            />
           </Form.Item>
 
           <Form.Item style={{ textAlign: 'right' }}>

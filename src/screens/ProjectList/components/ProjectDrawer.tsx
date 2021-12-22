@@ -83,7 +83,10 @@ export const ProjectDrawer = () => {
                   { required: true, message: '請輸入專案名稱' },
                 ]}
               >
-                <Input placeholder="請輸入專案名稱" />
+                <Input
+                  placeholder="請輸入專案名稱"
+                  autoComplete="off"
+                />
               </Form.Item>
 
               <Form.Item
@@ -91,7 +94,10 @@ export const ProjectDrawer = () => {
                 name="organization"
                 rules={[{ required: true, message: '請輸入部門名' }]}
               >
-                <Input placeholder="請輸入專案名稱" />
+                <Input
+                  placeholder="請輸入專案名稱"
+                  autoComplete="off"
+                />
               </Form.Item>
 
               <Form.Item

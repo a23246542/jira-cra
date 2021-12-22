@@ -37,6 +37,7 @@ export const CreateKanban = () => {
         value={name}
         onChange={(evt) => setName(evt.target.value.trim())}
         size="large"
+        autoComplete="off"
         onPressEnter={handleSubmitKanban}
       />
       {/* )} */}

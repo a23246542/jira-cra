@@ -86,7 +86,7 @@ export const TaskModal = () => {
             name="name"
             rules={[{ required: true, message: '請輸入任務名稱' }]}
           >
-            <Input placeholder="輸入任務名" />
+            <Input placeholder="輸入任務名" autoComplete="off" />
           </Form.Item>
           <Form.Item label="任務組" name="epicId">
             <EpicSelect defaultOptionName="任務組" />

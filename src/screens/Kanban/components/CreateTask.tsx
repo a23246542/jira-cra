@@ -46,6 +46,7 @@ export const CreateTask = ({ kanbanId }: ICreateTask) => {
         placeholder="新增任務"
         autoFocus
         value={name}
+        autoComplete="off"
         onBlur={handleToggleInput}
         onChange={(evt) => setName(evt.target.value.trim())}
         onPressEnter={handleSubmitTask}

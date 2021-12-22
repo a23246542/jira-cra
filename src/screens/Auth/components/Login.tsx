@@ -20,7 +20,7 @@ export const Login = () => {
           },
         ]}
       >
-        <Input placeholder="用戶名" type="text" />
+        <Input placeholder="用戶名" type="text" autoComplete="off" />
       </Form.Item>
       <Form.Item
         name="password"
@@ -31,7 +31,12 @@ export const Login = () => {
           },
         ]}
       >
-        <Input placeholder="密碼" type="password" id="password" />
+        <Input
+          placeholder="密碼"
+          type="password"
+          id="password"
+          autoComplete="off"
+        />
       </Form.Item>
       <Form.Item>
         <LongButton
